@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4b6e199e-16c3-4b70-8b7b-b770cb928934" name="walmart-remote" url="http://107.150.60.26">
+        <fileTransfer host="107.150.60.26" port="22" rootFolder="/var/www/html/laravel" accessType="SFTP" password="dff9dfcbdfc7dfdadfc6dfcfdf9bdf98df99df8b" username="stockcheck">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" showHiddenFiles="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - custom_monitoring_system@107.150.60.26" uuid="d370a25b-ee8c-423b-9550-ec2a9866bb9b">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <ssh-properties>
+        <enabled>false</enabled>
+        <proxy-host>107.150.60.26</proxy-host>
+        <proxy-port>3306</proxy-port>
+        <secret-storage>master_key</secret-storage>
+        <user>root</user>
+        <use-password>true</use-password>
+      </ssh-properties>
+    </data-source>
+  </component>
+</project>

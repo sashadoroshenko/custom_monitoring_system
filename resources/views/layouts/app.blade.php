@@ -48,6 +48,18 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}">Home</a></li>
+
+                    <li><a href="{{ url('/home/search') }}">Search</a></li>
+                    <li><a href="{{ url('/home/items') }}">Items</a></li>
+                    <li><a href="{{ url('/home/reviews') }}">Reviews</a></li>
+
+                    <li><a href="{{ url('/home/vod') }}">VOD</a></li>
+                    <li><a href="{{ url('/home/stores') }}">Stores</a></li>
+                    <li><a href="{{ url('/home/trends') }}">Trends</a></li>
+                    <li><a href="{{ url('/home/paginate') }}">Paginate</a></li>
+                    <li><a href="{{ url('/home/recommendation') }}">Recommendation</a></li>
+                    <li><a href="{{ url('/home/postBrowsed') }}">Post Browsed</a></li>
+                    <li><a href="{{ url('/home/dataFeed') }}">Data Feed</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

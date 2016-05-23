@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,13 +14,31 @@ Route::get('register', 'Auth\AuthController@getRegister');
 Route::post('register', 'Auth\AuthController@postRegister');
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
 
-    Route::get('home', function(){
-        return "Home";
+    Route::get('/', function(){
+        return view('home');
     });
 
-    Route::get('home/items/{id}', 'HomeController@getItemByID')->where('id', '[0-9]+');
+    Route::any('items', 'HomeController@items');
+
+    Route::any('reviews', 'HomeController@reviews');
+
+    Route::any('search', 'HomeController@search');
+
+    Route::get('vod', 'HomeController@getVod');
+
+    Route::any('stores', 'HomeController@stores');
+
+    Route::get('trends', 'HomeController@trendings');
+
+    Route::get('paginate', 'HomeController@getPaginate');
+
+    Route::any('recommendation', 'HomeController@recommendation');
+
+    Route::any('postBrowsed', 'HomeController@postBrowsed');
+
+    Route::any('dataFeed', 'HomeController@dataFeed');
 
 });
 

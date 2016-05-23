@@ -22,26 +22,37 @@ class Walmart implements WalmartInterfase
     /**
      * Provides price, availability etc of the item
      *
-     * @param integer $id
+     * @param null $ids
+     * @param null $upc
+     * @param null $lsPublisherId
      * @param string $format
      * @return mixed
      */
     public function getItems($ids = null, $upc = null, $lsPublisherId = null, $format = 'json')
     {
+        if (is_null($ids) && is_null($upc)) {
+            return false;
+        }
+
         $url = "/v1/items";
+
         $query = [
             'apiKey' => env('WALMART_API_KEY'),
             'format' => $format
         ];
-        if(isset($ids)) {
+
+        if (isset($ids) && !empty($ids)) {
             $url .= "/" . $ids;
         }
-        if(isset($upc)){
+
+        if (isset($upc)) {
             $query['upc'] = $upc;
         }
-        if(isset($lsPublisherId)){
+
+        if (isset($lsPublisherId)) {
             $query['lsPublisherId'] = $lsPublisherId;
         }
+
         return $this->client->request("GET", $url, [
             'query' => $query
         ]);
@@ -49,33 +60,48 @@ class Walmart implements WalmartInterfase
 
     /**
      * Provides reviews of the item
-     *
-     * @param integer $id
+     * 
+     * @param $id
+     * @param null $lsPublisherId
      * @param string $format
      * @return mixed
      */
-    public function getReviews($id, $format = 'json')
+    public function getReviews($id, $lsPublisherId = null, $format = 'json')
     {
-        return $this->client->request("GET", "/v1/reviews/{$id}", [
-            'query' => [
-                'format' => $format,
-                'apiKey' => env('WALMART_API_KEY')
-            ]
+        $url = "/v1/reviews/{$id}";
+
+        $query = [
+            'apiKey' => env('WALMART_API_KEY'),
+            'format' => $format
+        ];
+
+        if (isset($lsPublisherId) && !empty($lsPublisherId)) {
+            $query['lsPublisherId'] = $lsPublisherId;
+        }
+
+        return $this->client->request("GET", $url, [
+            'query' => $query
         ]);
     }
 
     /**
      * Allows text search on the Walmart.com catalogue and returns matching items available for sale online
      *
-     * @param string $query
-     * @param integer $categoryId
+     * @param $query
+     * @param null $categoryId
      * @param string $facet
-     * @param string $filter
-     * @param string $range
+     * @param null $filter
+     * @param null $range
+     * @param null $lsPublisherId
+     * @param int $start
+     * @param string $sort
+     * @param string $order
+     * @param int $numItems
      * @param string $format
+     * @param string $responseGroup
      * @return mixed
      */
-    public function getSearch($query, $categoryId = null, $facet = null, $filter = null, $range = null, $format = 'json')
+    public function getSearch($query, $categoryId = null, $facet = 'off', $filter = null, $range = null, $lsPublisherId = null, $start = 0, $sort = 'relevance', $order = 'asc', $numItems = 10, $format = 'json', $responseGroup = 'base')
     {
         $query = [
             'query' => $query,
@@ -83,11 +109,15 @@ class Walmart implements WalmartInterfase
             'apiKey' => env('WALMART_API_KEY')
         ];
 
-        if(isset($categoryId)){
+        if (isset($lsPublisherId)) {
+            $query['lsPublisherId'] = $lsPublisherId;
+        }
+
+        if (isset($categoryId)) {
             $query['categoryId'] = $categoryId;
         }
 
-        if($facet != 'off') {
+        if ($facet != 'off') {
             $query['facet'] = $facet;
 
 
@@ -100,7 +130,7 @@ class Walmart implements WalmartInterfase
             }
         }
 
-        return $this->client->request("GET", "/v1/search}", [
+        return $this->client->request("GET", "/v1/search", [
             'query' => $query
         ]);
     }
@@ -113,7 +143,14 @@ class Walmart implements WalmartInterfase
      */
     public function getVod($format = 'json')
     {
-        // TODO: Implement getVod() method.
+        $query = [
+            'format' => $format,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        return $this->client->request("GET", "/v1/vod", [
+            'query' => $query
+        ]);
     }
 
     /**
@@ -124,55 +161,168 @@ class Walmart implements WalmartInterfase
      */
     public function getTaxonomy($format = 'json')
     {
-        // TODO: Implement getTaxonomy() method.
+        $query = [
+            'format' => $format,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        return $this->client->request("GET", "/v1/taxonomy", [
+            'query' => $query
+        ]);
     }
 
     /**
      * Store Locator API
      *
-     * @param string $lat
-     * @param string $lon
-     * @param string $zip
-     * @param string $city
+     * @param null $lat
+     * @param null $lon
+     * @param null $zip
+     * @param null $city
      * @param string $format
      * @return mixed
      */
     public function getStoreLocatorAPI($lat = null, $lon = null, $zip = null, $city = null, $format = 'json')
     {
-        // TODO: Implement getStoreLocatorAPI() method.
+        $query = [
+            'format' => $format,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        if (isset($lat) && !empty($lat)) {
+            $query['lat'] = $lat;
+        }
+
+        if (isset($lon) && !empty($lon)) {
+            $query['lon'] = $lon;
+        }
+
+        if (isset($zip) && !empty($zip)) {
+            $query['zip'] = $zip;
+        }
+
+        if (isset($city) && !empty($city)) {
+            $query['city'] = $city;
+        }
+
+        return $this->client->request("GET", "/v1/stores", [
+            'query' => $query
+        ]);
     }
 
     /**
      * Returns trending items on walmart.com
      *
+     * @param null $lsPublisherId
      * @param string $format
      * @return mixed
      */
-    public function getTrendingAPI($format = 'json')
+    public function getTrendingAPI($lsPublisherId = null, $format = 'json')
     {
-        // TODO: Implement getTrendingAPI() method.
+        $query = [
+            'format' => $format,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+        
+        if (isset($lsPublisherId)) {
+            $query['lsPublisherId'] = $lsPublisherId;
+        }
+        
+        return $this->client->request("GET", "/v1/trends", [
+            'query' => $query
+        ]);
     }
 
     /**
      * New paginated API to fetch items
      *
-     * @param string $category
-     * @param string $brand
-     * @param string $specialOffer
+     * @param null $lsPublisherId
+     * @param null $category
+     * @param null $brand
+     * @param null $specialOffer
      * @param string $format
      * @return mixed
      */
-    public function getPaginatedAPI($category = null, $brand = null, $specialOffer = null, $format = 'json')
+    public function getPaginatedAPI($lsPublisherId = null, $category = null, $brand = null, $specialOffer = null, $format = 'json')
     {
-        // TODO: Implement getPaginatedAPI() method.
+        $query = [
+            'format' => $format,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        if (isset($lsPublisherId)) {
+            $query['lsPublisherId'] = $lsPublisherId;
+        }
+
+        if (isset($category)) {
+            $query['category'] = $category;
+        }
+
+        if (isset($brand)) {
+            $query['brand'] = $brand;
+        }
+
+        if (isset($specialOffer)) {
+            $query['specialOffer'] = $specialOffer;
+        }
+
+        return $this->client->request("GET", "/v1/paginated/items", [
+            'query' => $query
+        ]);
     }
 
     /**
-     * @param $response
+     * Returns a maximum of 10 item responses
+     *
+     * @param $itemId
      * @return mixed
      */
-    public function getBody($response)
+    public function getProductRecommendationAPI($itemId)
     {
-        return $response->getBody()->getContents();
+        $query = [
+            'itemId' => $itemId,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        return $this->client->request("GET", "/v1/nbp", [
+            'query' => $query
+        ]);
+    }
+
+    /**
+     * Returns a maximum of 10 item responses
+     *
+     * @param $itemId
+     * @return mixed
+     */
+    public function getPostBrowsedProductsAPI($itemId)
+    {
+        $query = [
+            'itemId' => $itemId,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        return $this->client->request("GET", "/v1/postbrowse", [
+            'query' => $query
+        ]);
+    }
+
+    /**
+     * Get the list of Walmart.com products by category.
+     *
+     * @param $categoryId
+     * @param string $format
+     * @return mixed
+     */
+    public function getDataFeedAPI($categoryId, $format = 'json')
+    {
+        $query = [
+            'format' => $format,
+            'categoryId' => $categoryId,
+            'apiKey' => env('WALMART_API_KEY')
+        ];
+
+        return $this->client->request("GET", "/v1/feeds/items", [
+            'query' => $query
+        ]);
     }
 }

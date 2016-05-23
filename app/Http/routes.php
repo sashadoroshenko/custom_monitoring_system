@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
     Route::get('vod', 'HomeController@getVod');
 
     Route::any('stores', 'HomeController@stores');
+    
+    Route::get('taxonomy', 'HomeController@taxonomy');
 
     Route::get('trends', 'HomeController@trendings');
 

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Walmart;
+use App\Services\Contractors\WalmartInterfase;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment() == 'local') {
             $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
         }
+        // Register repositories bindings here
+        $this->app->bind(WalmartInterfase::class, Walmart::class);
     }
 }

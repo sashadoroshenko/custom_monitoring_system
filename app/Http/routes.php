@@ -14,3 +14,25 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Authentication routes...
+Route::get('login', 'Auth\AuthController@getLogin');
+Route::post('login', 'Auth\AuthController@postLogin');
+Route::get('logout', 'Auth\AuthController@getLogout');
+
+// Registration routes...
+Route::get('register', 'Auth\AuthController@getRegister');
+Route::post('register', 'Auth\AuthController@postRegister');
+
+
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('home', function(){
+        return "Home";
+    });
+
+    Route::get('home/items/{id}', 'HomeController@getItemByID')->where('id', '[0-9]+');
+
+});
+
+

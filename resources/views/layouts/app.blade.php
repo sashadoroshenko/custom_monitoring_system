@@ -50,7 +50,7 @@
                     <li><a href="{{ url('/home') }}">Home</a></li>
                     @if (!Auth::guest())
                         <li><a href="{{ url('/home/search') }}">Search</a></li>
-                        <li><a href="{{ url('/home/items') }}">Items</a></li>
+                        <li><a href="{{ url('/home/item') }}">Item</a></li>
                         <li><a href="{{ url('/home/reviews') }}">Reviews</a></li>
                         <li><a href="{{ url('/home/taxonomy') }}">Taxonomy</a></li>
                         <li><a href="{{ url('/home/vod') }}">VOD</a></li>
@@ -59,6 +59,7 @@
                         <li><a href="{{ url('/home/paginate') }}">Paginate</a></li>
                         <li><a href="{{ url('/home/recommendation') }}">Recommendation</a></li>
                         <li><a href="{{ url('/home/postBrowsed') }}">Post Browsed</a></li>
+                        <li><a href="{{ url('/items') }}">Items</a></li>
                         {{--<li><a href="{{ url('/home/dataFeed') }}">Data Feed</a></li>--}}
                     @endif
                 </ul>

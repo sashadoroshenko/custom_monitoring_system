@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\Contractors\WalmartInterfase;
-use App\Services\Walmart;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Psr\Http\Message\ResponseInterface;
 
 class HomeController extends Controller
 {
@@ -157,7 +154,7 @@ class HomeController extends Controller
             $response = json_decode($this->walmart->getPostBrowsedProductsAPI($itemId)->getBody());
             return view('postBrowsed', compact('response', 'itemId'));
         }
-        
+
         return view('postBrowsed');
     }
 
@@ -172,7 +169,7 @@ class HomeController extends Controller
             $response = json_decode($this->walmart->getDataFeedAPI($categoryId)->getBody());
             return view('dataFeed', compact('response', 'categoryId'));
         }
-        
+
         return view('dataFeed');
     }
 }

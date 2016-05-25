@@ -1,5 +1,7 @@
 <?php
 
+\Debugbar::disable();
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -14,13 +16,17 @@ Route::get('register', 'Auth\AuthController@getRegister');
 Route::post('register', 'Auth\AuthController@postRegister');
 
 
+
 Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
 
-    Route::get('/', function(){
-        return view('home');
+//    Route::get('/', 'ItemsController@index');
+    Route::get('/', function () {
+        return redirect('items');
+//        return view('dashboard');
+////        return view('home');
     });
 
-    Route::any('items', 'HomeController@items');
+    Route::any('item', 'HomeController@items');
 
     Route::any('reviews', 'HomeController@reviews');
 
@@ -29,7 +35,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
     Route::get('vod', 'HomeController@getVod');
 
     Route::any('stores', 'HomeController@stores');
-    
+
     Route::get('taxonomy', 'HomeController@taxonomy');
 
     Route::get('trends', 'HomeController@trendings');
@@ -44,4 +50,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
 
 });
 
+//Route::get('dashboard', function(){
+//    return view('dashboard');
+//});
+Route::post('items/showAlert', 'ItemsController@showAlert');
+Route::resource('items', 'ItemsController');
 
+
+Route::any('{catchall}', function($page){
+//    return 1;
+    abort(404,"the page '$page' doesnt exist");
+})->where('catchall', '(.*)');

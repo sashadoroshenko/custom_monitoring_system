@@ -14,7 +14,8 @@
         "doctrine/dbal": "^2.5",
         "appzcoder/crud-generator": "^1.0",
         "laracasts/generators": "^1.1",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "uxweb/sweet-alert": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -8,7 +8,7 @@
                     <div class="panel-heading">Items</div>
 
                     <div class="panel-body">
-                        {!! Form::open(['url' => 'home/items', 'class' => 'form-horizontal'])!!}
+                        {!! Form::open(['url' => 'home/item', 'class' => 'form-horizontal'])!!}
 
                         <div class="form-group {{ $errors->has('ids') ? 'has-error' : ''}}">
                             {!! Form::label('ids', 'Item ID: ', ['class' => 'col-sm-3 control-label']) !!}

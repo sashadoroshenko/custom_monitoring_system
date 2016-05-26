@@ -71,14 +71,18 @@
 
             function Update() {
                 $.ajax({
-                    url: "/",
+                    url: "{{ url('items/showAlert') }}",
                     type: "POST",
+                    data: {_token: "{{ csrf_token() }}"},
+                    dataType: "json",
                     success: function (data) {
-                        alert(data);
+                        console.log(data);
                         timedRefresh(60000);
+                    },
+                    error: function (error) {
+                        console.log(error)
                     }
                 });
-
             }
 
             $('#example').DataTable();

@@ -55,7 +55,13 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['parentItemId' => 'required', 'name' => 'required', 'salePrice' => 'required', 'upc' => 'required', 'categoryPath' => 'required', 'shortDescription' => 'required', 'longDescription' => 'required', 'brandName' => 'required', 'thumbnailImage' => 'required', 'mediumImage' => 'required', 'largeImage' => 'required', 'productTrackingUrl' => 'required', 'ninetySevenCentShipping' => 'required', 'standardShipRate' => 'required', 'size' => 'required', 'color' => 'required', 'marketplace' => 'required', 'shipToStore' => 'required', 'freeShipToStore' => 'required', 'productUrl' => 'required', 'variants' => 'required', 'categoryNode' => 'required', 'bundle' => 'required', 'clearance' => 'required', 'preOrder' => 'required', 'stock' => 'required', 'attribute' => 'required', 'gender' => 'required', 'addToCartUrl' => 'required', 'affiliateAddToCartUrl' => 'required', 'freeShippingOver50Dollars' => 'required', 'maxItemsInOrder' => 'required', 'giftOptions' => 'required', 'availableOnline' => 'required',]);
+        $this->validate($request, [
+            'itemID' => 'required',
+            'userID' => 'required',
+            'price' => 'required',
+            'title' => 'required',
+            'stock' => 'required'
+        ]);
 
         Item::create($request->all());
 
@@ -101,10 +107,30 @@ class ItemsController extends Controller
      */
     public function update($id, Request $request)
     {
-        $this->validate($request, ['parentItemId' => 'required', 'name' => 'required', 'salePrice' => 'required', 'upc' => 'required', 'categoryPath' => 'required', 'shortDescription' => 'required', 'longDescription' => 'required', 'brandName' => 'required', 'thumbnailImage' => 'required', 'mediumImage' => 'required', 'largeImage' => 'required', 'productTrackingUrl' => 'required', 'ninetySevenCentShipping' => 'required', 'standardShipRate' => 'required', 'size' => 'required', 'color' => 'required', 'marketplace' => 'required', 'shipToStore' => 'required', 'freeShipToStore' => 'required', 'productUrl' => 'required', 'variants' => 'required', 'categoryNode' => 'required', 'bundle' => 'required', 'clearance' => 'required', 'preOrder' => 'required', 'stock' => 'required', 'attribute' => 'required', 'gender' => 'required', 'addToCartUrl' => 'required', 'affiliateAddToCartUrl' => 'required', 'freeShippingOver50Dollars' => 'required', 'maxItemsInOrder' => 'required', 'giftOptions' => 'required', 'availableOnline' => 'required',]);
+        $this->validate($request, [
+            'itemID' => 'required',
+            'userID' => 'required',
+            'price' => 'required',
+            'title' => 'required',
+            'stock' => 'required'
+        ]);
 
         $item = Item::findOrFail($id);
-        $item->update($request->all());
+        $data = $request->all();
+
+        if(!$request->has('alert_desktop') && $item->alert_desktop){
+            $data['alert_desktop'] = false;
+        }
+
+        if(!$request->has('alert_email') && $item->alert_email){
+            $data['alert_email'] = false;
+        }
+
+        if(!$request->has('alert_sms') && $item->alert_sms){
+            $data['alert_sms'] = false;
+        }
+
+        $item->update($data);
 
         Session::flash('flash_message', 'Item updated!');
 
@@ -130,14 +156,37 @@ class ItemsController extends Controller
     public function showAlert()
     {
         $items = Item::all();
-        return $items;
+        $result = [];
         foreach ($items as $item) {
-            $respons = json_decode($this->walmart->getItems($item->ItemID)->getBody());
+            $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
             if ($respons->salePrice != $item->price) {
-                \Log::error('error');
+                $result[] =  [
+                    'status' => 404,
+                    'itemID' => $item->itemID,
+                    'oldPrice' => (float) $item->price,
+                    'newPrice' => (float) $respons->salePrice
+                ];
             } else {
-                \Log::info('success');
+                $result[] =  [
+                    'status' => 200,
+                    'itemID' => $item->itemID,
+                    'oldPrice' => $item->price,
+                    'newPrice' => $respons->salePrice
+                ];
             }
         }
+
+        return $result;
+    }
+
+
+    /**
+     * Provides price, availability etc of the item
+     *
+     */
+
+    public function items()
+    {
+        return $this->walmart->getItems(intval(request()->input('id', null)))->getBody();
     }
 }

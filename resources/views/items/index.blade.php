@@ -2,6 +2,11 @@
 
 @section('content')
     <link href="{{ asset('/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .checkbox {
+            display: block !important;
+        }
+    </style>
     <div class="container">
 
         <h1>Items
@@ -14,9 +19,12 @@
                 <thead>
                 <tr>
                     <th>S.No</th>
-                    <th> {{ trans('items.parentItemId') }} </th>
-                    <th> {{ trans('items.name') }} </th>
-                    <th> {{ trans('items.salePrice') }} </th>
+                    <th> Item ID </th>
+                    <th> Title </th>
+                    <th> User ID </th>
+                    <th> Price </th>
+                    <th> Stock </th>
+                    <th> Alert System </th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -26,9 +34,23 @@
                     {{-- */$x++;/* --}}
                     <tr>
                         <td>{{ $x }}</td>
-                        <td>{{ $item->parentItemId }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->salePrice }}</td>
+                        <td>{{ $item->itemID }}</td>
+                        <td>{{ $item->title }}</td>
+                        <td>{{ $item->userID }}</td>
+                        <td>${{ $item->price }}</td>
+                        <td>{{ $item->stock }}</td>
+                        <td>
+                            <div class="checkbox">
+                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_desktop) !!} : Desktop</label>
+                            </div>
+                            <div class="checkbox">
+                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_email) !!} : Email</label>
+                            </div>
+                            <div class="checkbox disabled">
+                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_sms) !!} : SMS</label>
+                            </div>
+
+                        </td>
                         <td>
                             <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
@@ -55,9 +77,9 @@
             </table>
             <div class="pagination"> {!! $items->render() !!} </div>
         </div>
-
     </div>
-    <script src="{{ asset('/js/jquery.js') }}" type="text/javascript"></script>
+@endsection
+@section('scripts')
     <script src="{{ asset('/js/jquery.dataTables.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
@@ -73,9 +95,28 @@
                     type: "POST",
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",
-                    success: function (data) {
-                        console.log(data);
+                    success: function (data, textStatus, jqXHR) {
+                        var message = '';
+                        data.forEach(function (element, index, array) {
+
+                            if(element.status === 200) {
+                                message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                            }else{
+                                message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                            }
+                        });
+
+                        swal({
+                            title: "<small>Title</small>!",
+                            text: message,
+                            html: true,
+                            timer: 10000
+                        });
+//                        console.log(data);
                         timedRefresh(60000);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR)
                     }
                 });
 

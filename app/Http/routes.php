@@ -1,6 +1,6 @@
 <?php
 
-\Debugbar::disable();
+//\Debugbar::disable();
 
 Route::get('/', function () {
     return view('welcome');
@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
 //    return view('dashboard');
 //});
 Route::post('items/showAlert', 'ItemsController@showAlert');
+Route::post('items/items', 'ItemsController@items');
 Route::resource('items', 'ItemsController');
 
 

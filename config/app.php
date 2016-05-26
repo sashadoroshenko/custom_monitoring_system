@@ -146,7 +146,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Aloha\Twilio\Support\Laravel\ServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
@@ -200,7 +199,6 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
 

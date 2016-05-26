@@ -36,9 +36,9 @@ class HomeController extends Controller
             $lsPublisherId = request()->input('lsPublisherId', null);
 
             $response = json_decode($this->walmart->getItems($ids, $upc, $lsPublisherId)->getBody());
-            return view('items', compact('response', 'ids', 'upc', 'lsPublisherId'));
+            return view('walmart.items', compact('response', 'ids', 'upc', 'lsPublisherId'));
         }
-        return view('items');
+        return view('walmart.items');
     }
 
     /**
@@ -51,9 +51,9 @@ class HomeController extends Controller
             $id = request()->input('id', null);
             $lsPublisherId = request()->input('lsPublisherId', null);
             $response = json_decode($this->walmart->getReviews($id, $lsPublisherId)->getBody());
-            return view('reviews', compact('response', 'ids', 'upc', 'lsPublisherId'));
+            return view('walmart.reviews', compact('response', 'ids', 'upc', 'lsPublisherId'));
         }
-        return view('reviews');
+        return view('walmart.reviews');
     }
 
     /**
@@ -71,9 +71,9 @@ class HomeController extends Controller
             $range = request()->input('range', null);
 
             $response = json_decode($this->walmart->getSearch($query, $categoryId, $facet, $filter, $range, $lsPublisherId)->getBody());
-            return view('search', compact('response', 'query', 'categoryId', 'facet', 'filter', 'range'));
+            return view('walmart.search', compact('response', 'query', 'categoryId', 'facet', 'filter', 'range'));
         }
-        return view('search');
+        return view('walmart.search');
     }
 
 
@@ -83,7 +83,7 @@ class HomeController extends Controller
     public function getVod()
     {
         $response = json_decode($this->walmart->getVod()->getBody());
-        return view('vod', compact('response'));
+        return view('walmart.vod', compact('response'));
     }
 
     /**
@@ -92,7 +92,7 @@ class HomeController extends Controller
     public function taxonomy()
     {
         $response = json_decode($this->walmart->getTaxonomy()->getBody());
-        return view('taxonomy', compact('response'));
+        return view('walmart.taxonomy', compact('response'));
     }
 
     /**
@@ -106,9 +106,9 @@ class HomeController extends Controller
             $zip = request()->input('zip', null);
             $city = request()->input('city', null);
             $response = json_decode($this->walmart->getStoreLocatorAPI($lat, $lon, $zip, $city)->getBody());
-            return view('stores', compact('response', 'lat', 'lon', 'zip', 'city'));
+            return view('walmart.stores', compact('response', 'lat', 'lon', 'zip', 'city'));
         }
-        return view('stores');
+        return view('walmart.stores');
     }
 
     /**
@@ -117,7 +117,7 @@ class HomeController extends Controller
     public function trendings()
     {
         $response = json_decode($this->walmart->getTrendingAPI()->getBody());
-        return view('trends', compact('response'));
+        return view('walmart.trends', compact('response'));
     }
 
     /**
@@ -126,7 +126,7 @@ class HomeController extends Controller
     public function getPaginate()
     {
         $response = json_decode($this->walmart->getPaginatedAPI()->getBody());
-        return view('paginate', compact('response'));
+        return view('walmart.paginate', compact('response'));
     }
 
     /**
@@ -138,9 +138,9 @@ class HomeController extends Controller
         if (request()->isMethod('POST')) {
             $itemId = request()->input('itemId');
             $response = json_decode($this->walmart->getProductRecommendationAPI($itemId)->getBody());
-            return view('recommendation', compact('response', 'itemId'));
+            return view('walmart.recommendation', compact('response', 'itemId'));
         }
-        return view('recommendation');
+        return view('walmart.recommendation');
     }
 
     /**
@@ -152,10 +152,10 @@ class HomeController extends Controller
         if (request()->isMethod('POST')) {
             $itemId = request()->input('itemId');
             $response = json_decode($this->walmart->getPostBrowsedProductsAPI($itemId)->getBody());
-            return view('postBrowsed', compact('response', 'itemId'));
+            return view('walmart.postBrowsed', compact('response', 'itemId'));
         }
 
-        return view('postBrowsed');
+        return view('walmart.postBrowsed');
     }
 
     /**
@@ -167,9 +167,9 @@ class HomeController extends Controller
         if (request()->isMethod('POST')) {
             $categoryId = request()->input('categoryId');
             $response = json_decode($this->walmart->getDataFeedAPI($categoryId)->getBody());
-            return view('dataFeed', compact('response', 'categoryId'));
+            return view('walmart.dataFeed', compact('response', 'categoryId'));
         }
 
-        return view('dataFeed');
+        return view('walmart.dataFeed');
     }
 }

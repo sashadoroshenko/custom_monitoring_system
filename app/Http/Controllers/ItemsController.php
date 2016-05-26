@@ -118,15 +118,15 @@ class ItemsController extends Controller
         $item = Item::findOrFail($id);
         $data = $request->all();
 
-        if(!$request->has('alert_desktop') && $item->alert_desktop){
+        if (!$request->has('alert_desktop') && $item->alert_desktop) {
             $data['alert_desktop'] = false;
         }
 
-        if(!$request->has('alert_email') && $item->alert_email){
+        if (!$request->has('alert_email') && $item->alert_email) {
             $data['alert_email'] = false;
         }
 
-        if(!$request->has('alert_sms') && $item->alert_sms){
+        if (!$request->has('alert_sms') && $item->alert_sms) {
             $data['alert_sms'] = false;
         }
 
@@ -156,18 +156,21 @@ class ItemsController extends Controller
     public function showAlert()
     {
         $items = Item::all();
+        if (count($items) == 0) {
+            return response()->json(['status' => 'error']);
+        }
         $result = [];
         foreach ($items as $item) {
             $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
             if ($respons->salePrice != $item->price) {
-                $result[] =  [
+                $result[] = [
                     'status' => 404,
                     'itemID' => $item->itemID,
-                    'oldPrice' => (float) $item->price,
-                    'newPrice' => (float) $respons->salePrice
+                    'oldPrice' => (float)$item->price,
+                    'newPrice' => (float)$respons->salePrice
                 ];
             } else {
-                $result[] =  [
+                $result[] = [
                     'status' => 200,
                     'itemID' => $item->itemID,
                     'oldPrice' => $item->price,

@@ -96,6 +96,9 @@
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
+                        if(data.status == "error"){
+                            return;
+                        }
                         var message = '';
                         data.forEach(function (element, index, array) {
 

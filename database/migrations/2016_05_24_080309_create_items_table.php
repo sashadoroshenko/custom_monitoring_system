@@ -14,6 +14,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function(Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
             $table->string('itemID');
             $table->string('userID');
             $table->string('price');
@@ -23,6 +24,9 @@ class CreateItemsTable extends Migration
             $table->string('alert_email')->nullable();
             $table->string('alert_sms')->nullable();
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

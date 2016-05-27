@@ -64,6 +64,8 @@ class ItemsController extends Controller
         ]);
 
         $data = $request->all();
+        
+        $data['user_id'] = auth()->user()->id;
 
         if (!$request->has('alert_desktop')) {
             $data['alert_desktop'] = 'false';
@@ -131,6 +133,8 @@ class ItemsController extends Controller
 
         $item = Item::findOrFail($id);
         $data = $request->all();
+
+        $data['user_id'] = auth()->user()->id;
 
         if (!$request->has('alert_desktop') && $item->alert_desktop || !$request->has('alert_desktop') && !$item->alert_desktop) {
             $data['alert_desktop'] = 'false';

@@ -57,13 +57,27 @@ class ItemsController extends Controller
     {
         $this->validate($request, [
             'itemID' => 'required',
-            'userID' => 'required',
+//            'userID' => 'required',
             'price' => 'required',
             'title' => 'required',
             'stock' => 'required'
         ]);
 
-        Item::create($request->all());
+        $data = $request->all();
+
+        if (!$request->has('alert_desktop')) {
+            $data['alert_desktop'] = 'false';
+        }
+
+        if (!$request->has('alert_email')) {
+            $data['alert_email'] = 'false';
+        }
+
+        if (!$request->has('alert_sms')) {
+            $data['alert_sms'] = 'false';
+        }
+
+        Item::create($data);
 
         Session::flash('flash_message', 'Item added!');
 
@@ -109,7 +123,7 @@ class ItemsController extends Controller
     {
         $this->validate($request, [
             'itemID' => 'required',
-            'userID' => 'required',
+//            'userID' => 'required',
             'price' => 'required',
             'title' => 'required',
             'stock' => 'required'
@@ -118,16 +132,16 @@ class ItemsController extends Controller
         $item = Item::findOrFail($id);
         $data = $request->all();
 
-        if (!$request->has('alert_desktop') && $item->alert_desktop) {
-            $data['alert_desktop'] = false;
+        if (!$request->has('alert_desktop') && $item->alert_desktop || !$request->has('alert_desktop') && !$item->alert_desktop) {
+            $data['alert_desktop'] = 'false';
         }
 
-        if (!$request->has('alert_email') && $item->alert_email) {
-            $data['alert_email'] = false;
+        if (!$request->has('alert_email') && $item->alert_email || !$request->has('alert_email') && !$item->alert_email) {
+            $data['alert_email'] = 'false';
         }
 
-        if (!$request->has('alert_sms') && $item->alert_sms) {
-            $data['alert_sms'] = false;
+        if (!$request->has('alert_sms') && $item->alert_sms || !$request->has('alert_sms') && !$item->alert_sms) {
+            $data['alert_sms'] = 'false';
         }
 
         $item->update($data);

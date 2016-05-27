@@ -7,76 +7,74 @@
             display: block !important;
         }
     </style>
-    <div class="container">
 
-        <h1>Items
-            <a href="{{ url('/items/create') }}" class="btn btn-primary btn-xs" title="Add New Item">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
-            </a>
-        </h1>
-        <div class="table">
-            <table id="example" class="table table-bordered table-striped table-hover">
-                <thead>
+    <h1>Items
+        <a href="{{ url('/items/create') }}" class="btn btn-primary btn-xs" title="Add New Item">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
+        </a>
+    </h1>
+    <div class="table">
+        <table id="example" class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>S.No</th>
+                <th> Item ID </th>
+                <th> Title </th>
+                <th> User ID </th>
+                <th> Price </th>
+                <th> Stock </th>
+                <th> Alert System </th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{-- */$x=0;/* --}}
+            @foreach($items as $item)
+                {{-- */$x++;/* --}}
                 <tr>
-                    <th>S.No</th>
-                    <th> Item ID </th>
-                    <th> Title </th>
-                    <th> User ID </th>
-                    <th> Price </th>
-                    <th> Stock </th>
-                    <th> Alert System </th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{-- */$x=0;/* --}}
-                @foreach($items as $item)
-                    {{-- */$x++;/* --}}
-                    <tr>
-                        <td>{{ $x }}</td>
-                        <td>{{ $item->itemID }}</td>
-                        <td>{{ $item->title }}</td>
-                        <td>{{ $item->userID }}</td>
-                        <td>${{ $item->price }}</td>
-                        <td>{{ $item->stock }}</td>
-                        <td>
-                            <div class="checkbox">
-                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_desktop) !!} : Desktop</label>
-                            </div>
-                            <div class="checkbox">
-                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_email) !!} : Email</label>
-                            </div>
-                            <div class="checkbox disabled">
-                                <label>{!! Form::checkbox('alert_sms', 'true', $item->alert_sms) !!} : SMS</label>
-                            </div>
+                    <td>{{ $x }}</td>
+                    <td>{{ $item->itemID }}</td>
+                    <td>{{ $item->title }}</td>
+                    <td>{{ $item->userID }}</td>
+                    <td>${{ $item->price }}</td>
+                    <td>{{ $item->stock }}</td>
+                    <td>
+                        <div class="checkbox">
+                            <label><i class="glyphicon @if($item->alert_desktop === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : Desktop</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><i class="glyphicon @if($item->alert_email === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : Email</label>
+                        </div>
+                        <div class="checkbox disabled">
+                            <label><i class="glyphicon @if($item->alert_sms === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : SMS</label>
+                        </div>
 
-                        </td>
-                        <td>
-                            <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
-                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
-                            </a>
-                            <a href="{{ url('/items/' . $item->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit Item">
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
-                            </a>
-                            {!! Form::open([
-                                'method'=>'DELETE',
-                                'url' => ['/items', $item->id],
-                                'style' => 'display:inline'
-                            ]) !!}
-                            {!! Form::button('<span class="glyphicon glyphicon-trash" aria-hidden="true" title="Delete Item" />', array(
-                                    'type' => 'submit',
-                                    'class' => 'btn btn-danger btn-xs',
-                                    'title' => 'Delete Item',
-                                    'onclick'=>'return confirm("Confirm delete?")'
-                            ))!!}
-                            {!! Form::close() !!}
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            <div class="pagination"> {!! $items->render() !!} </div>
-        </div>
+                    </td>
+                    <td>
+                        <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
+                        </a>
+                        <a href="{{ url('/items/' . $item->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit Item">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
+                        </a>
+                        {!! Form::open([
+                            'method'=>'DELETE',
+                            'url' => ['/items', $item->id],
+                            'style' => 'display:inline'
+                        ]) !!}
+                        {!! Form::button('<span class="glyphicon glyphicon-trash" aria-hidden="true" title="Delete Item" />', array(
+                                'type' => 'submit',
+                                'class' => 'btn btn-danger btn-xs',
+                                'title' => 'Delete Item',
+                                'onclick'=>'return confirm("Confirm delete?")'
+                        ))!!}
+                        {!! Form::close() !!}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        <div class="pagination"> {!! $items->render() !!} </div>
     </div>
 @endsection
 @section('scripts')
@@ -107,10 +105,11 @@
                             }else{
                                 message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
                             }
+                            message += "<br>";
                         });
 
                         swal({
-                            title: "<small>Title</small>!",
+                            title: "<small class='text-danger'>Monitoring System Alerts <i class='glyphicon glyphicon-alert'></i></small>",
                             text: message,
                             html: true,
                             timer: 10000

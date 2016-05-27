@@ -1,7 +1,5 @@
 <?php
 
-//\Debugbar::disable();
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -17,46 +15,44 @@ Route::post('register', 'Auth\AuthController@postRegister');
 
 
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'home'], function () {
+Route::group(['middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'home'], function () {
 
-//    Route::get('/', 'ItemsController@index');
-    Route::get('/', function () {
-        return redirect('items');
-//        return view('dashboard');
-////        return view('home');
+        Route::get('/', function () {
+            return redirect('items');
+        });
+
+        Route::any('item', 'HomeController@items');
+
+        Route::any('reviews', 'HomeController@reviews');
+
+        Route::any('search', 'HomeController@search');
+
+        Route::get('vod', 'HomeController@getVod');
+
+        Route::any('stores', 'HomeController@stores');
+
+        Route::get('taxonomy', 'HomeController@taxonomy');
+
+        Route::get('trends', 'HomeController@trendings');
+
+        Route::get('paginate', 'HomeController@getPaginate');
+
+        Route::any('recommendation', 'HomeController@recommendation');
+
+        Route::any('postBrowsed', 'HomeController@postBrowsed');
+
+        Route::any('dataFeed', 'HomeController@dataFeed');
+
     });
 
-    Route::any('item', 'HomeController@items');
+    Route::post('items/showAlert', 'ItemsController@showAlert');
 
-    Route::any('reviews', 'HomeController@reviews');
+    Route::post('items/items', 'ItemsController@items');
 
-    Route::any('search', 'HomeController@search');
-
-    Route::get('vod', 'HomeController@getVod');
-
-    Route::any('stores', 'HomeController@stores');
-
-    Route::get('taxonomy', 'HomeController@taxonomy');
-
-    Route::get('trends', 'HomeController@trendings');
-
-    Route::get('paginate', 'HomeController@getPaginate');
-
-    Route::any('recommendation', 'HomeController@recommendation');
-
-    Route::any('postBrowsed', 'HomeController@postBrowsed');
-
-    Route::any('dataFeed', 'HomeController@dataFeed');
+    Route::resource('items', 'ItemsController');
 
 });
-
-//Route::get('dashboard', function(){
-//    return view('dashboard');
-//});
-Route::post('items/showAlert', 'ItemsController@showAlert');
-Route::post('items/items', 'ItemsController@items');
-Route::resource('items', 'ItemsController');
-
 
 Route::any('{catchall}', function($page){
 //    return 1;

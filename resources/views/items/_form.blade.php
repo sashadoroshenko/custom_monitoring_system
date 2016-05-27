@@ -24,7 +24,7 @@
     {!! Form::label('price', 'Price', ['class' => 'col-sm-3 control-label']) !!}
     <div class="col-sm-6">
         <div class="input-group">
-            {!! Form::text('price', null, ['class' => 'form-control', 'placeholder' => 'Enter old price']) !!}
+            {!! Form::text('price', null, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
             <span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-usd"></i></span>
         </div>
         {!! $errors->first('price', '<p class="help-block">:message</p>') !!}
@@ -53,7 +53,7 @@
     </div>
 </div>
 
-<div class="form-group {{ $errors->has('title') ? 'has-error' : ''}}">
+<div class="form-group">
     {!! Form::label('alert', 'Alert System', ['class' => 'col-sm-3 control-label']) !!}
     <div class="col-sm-6">
         <div class="input-group">
@@ -92,8 +92,9 @@
                         dataType: "json",
                         success: function (data, textStatus, jqXHR) {
                             if(jqXHR.status === 200){
-                                $('.title').val(data.name)
-                                $('.stock').val(data.stock)
+                                $('.title').val(data.name);
+                                $('.stock').val(data.stock);
+                                $('.price').val(data.salePrice);
                                 if(data.stock === "Available"){
                                     $('.stock-icon').addClass("glyphicon-ok").removeClass("glyphicon-remove").removeClass("glyphicon-tag")
                                 }else{

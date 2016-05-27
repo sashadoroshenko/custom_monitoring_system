@@ -58,13 +58,13 @@
     <div class="col-sm-6">
         <div class="input-group">
             <div class="checkbox">
-                <label>{!! Form::checkbox('alert_desktop', 'true', null) !!} Desktop</label>
+                <label>{!! Form::checkbox('alert_desktop', 1, null) !!} Desktop</label>
             </div>
             <div class="checkbox">
-                <label>{!! Form::checkbox('alert_email', 'true', null) !!} Email</label>
+                <label>{!! Form::checkbox('alert_email', 1, null) !!} Email</label>
             </div>
             <div class="checkbox disabled">
-                <label>{!! Form::checkbox('alert_sms', 'true', null) !!} SMS</label>
+                <label>{!! Form::checkbox('alert_sms', 1, null) !!} SMS</label>
             </div>
         </div>
     </div>

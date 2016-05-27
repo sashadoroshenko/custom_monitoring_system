@@ -21,6 +21,7 @@
                 <th> Item ID </th>
                 <th> Title </th>
                 <th> User ID </th>
+                <th> User </th>
                 <th> Price </th>
                 <th> Stock </th>
                 <th> Alert System </th>
@@ -36,17 +37,18 @@
                     <td>{{ $item->itemID }}</td>
                     <td>{{ $item->title }}</td>
                     <td>{{ $item->userID }}</td>
+                    <td>{{ $item->user->name }}</td>
                     <td>${{ $item->price }}</td>
                     <td>{{ $item->stock }}</td>
                     <td>
                         <div class="checkbox">
-                            <label><i class="glyphicon @if($item->alert_desktop === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : Desktop</label>
+                            <label><i class="glyphicon @if($item->alert_desktop)  glyphicon-check @else glyphicon-unchecked @endif"></i> : Desktop</label>
                         </div>
                         <div class="checkbox">
-                            <label><i class="glyphicon @if($item->alert_email === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : Email</label>
+                            <label><i class="glyphicon @if($item->alert_email)  glyphicon-check @else glyphicon-unchecked @endif"></i> : Email</label>
                         </div>
                         <div class="checkbox disabled">
-                            <label><i class="glyphicon @if($item->alert_sms === "true")  glyphicon-check @else glyphicon-unchecked @endif"></i> : SMS</label>
+                            <label><i class="glyphicon @if($item->alert_sms)  glyphicon-check @else glyphicon-unchecked @endif"></i> : SMS</label>
                         </div>
 
                     </td>
@@ -89,7 +91,7 @@
 
             function Update() {
                 $.ajax({
-                    url: "{{url('items/showAlert')}}",
+                    url: "{{url('items/showDesktopAlerts')}}",
                     type: "POST",
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",

@@ -20,9 +20,9 @@ class CreateItemsTable extends Migration
             $table->string('price');
             $table->string('title');
             $table->string('stock');
-            $table->string('alert_desktop')->nullable();
-            $table->string('alert_email')->nullable();
-            $table->string('alert_sms')->nullable();
+            $table->boolean('alert_desktop')->nullable();
+            $table->boolean('alert_email')->nullable();
+            $table->boolean('alert_sms')->nullable();
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

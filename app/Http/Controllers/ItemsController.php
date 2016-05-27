@@ -64,19 +64,19 @@ class ItemsController extends Controller
         ]);
 
         $data = $request->all();
-        
+
         $data['user_id'] = auth()->user()->id;
 
         if (!$request->has('alert_desktop')) {
-            $data['alert_desktop'] = 'false';
+            $data['alert_desktop'] = 0;
         }
 
         if (!$request->has('alert_email')) {
-            $data['alert_email'] = 'false';
+            $data['alert_email'] = 0;
         }
 
         if (!$request->has('alert_sms')) {
-            $data['alert_sms'] = 'false';
+            $data['alert_sms'] = 0;
         }
 
         Item::create($data);
@@ -137,15 +137,15 @@ class ItemsController extends Controller
         $data['user_id'] = auth()->user()->id;
 
         if (!$request->has('alert_desktop') && $item->alert_desktop || !$request->has('alert_desktop') && !$item->alert_desktop) {
-            $data['alert_desktop'] = 'false';
+            $data['alert_desktop'] = 0;
         }
 
         if (!$request->has('alert_email') && $item->alert_email || !$request->has('alert_email') && !$item->alert_email) {
-            $data['alert_email'] = 'false';
+            $data['alert_email'] = 0;
         }
 
         if (!$request->has('alert_sms') && $item->alert_sms || !$request->has('alert_sms') && !$item->alert_sms) {
-            $data['alert_sms'] = 'false';
+            $data['alert_sms'] = 0;
         }
 
         $item->update($data);
@@ -171,9 +171,9 @@ class ItemsController extends Controller
         return redirect('items');
     }
 
-    public function showAlert()
+    public function showDesktopAlerts()
     {
-        $items = Item::all();
+        $items = Item::where('alert_desktop', 1)->get();
         if (count($items) == 0) {
             return response()->json(['status' => 'error']);
         }
@@ -184,15 +184,15 @@ class ItemsController extends Controller
                 $result[] = [
                     'status' => 404,
                     'itemID' => $item->itemID,
-                    'oldPrice' => (float)$item->price,
-                    'newPrice' => (float)$respons->salePrice
+                    'oldPrice' => (float) $item->price,
+                    'newPrice' => (float) $respons->salePrice
                 ];
             } else {
                 $result[] = [
                     'status' => 200,
                     'itemID' => $item->itemID,
-                    'oldPrice' => $item->price,
-                    'newPrice' => $respons->salePrice
+                    'oldPrice' => (float) $item->price,
+                    'newPrice' => (float) $respons->salePrice
                 ];
             }
         }

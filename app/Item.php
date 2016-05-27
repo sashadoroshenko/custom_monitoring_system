@@ -14,10 +14,10 @@ class Item extends Model
     protected $table = 'items';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -36,4 +36,9 @@ class Item extends Model
         'alert_email',
         'alert_sms',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -91,16 +91,23 @@
                         },
                         dataType: "json",
                         success: function (data, textStatus, jqXHR) {
-                            if(jqXHR.status === 200){
-                                $('.title').val(data.name);
-                                $('.stock').val(data.stock);
-                                $('.price').val(data.salePrice);
-                                if(data.stock === "Available"){
-                                    $('.stock-icon').addClass("glyphicon-ok").removeClass("glyphicon-remove").removeClass("glyphicon-tag")
-                                }else{
-                                    $('.stock-icon').addClass("glyphicon-remove").removeClass("glyphicon-ok").removeClass("glyphicon-tag")
-                                }
-                                console.log(data);
+                            console.log(data);
+                            if(data.length != 0) {
+                                data.forEach(function (value, index, array) {
+                                    $('.title').val(value.name);
+                                    $('.stock').val(value.stock);
+                                    $('.price').val(value.salePrice);
+                                    if (value.stock === "Available") {
+                                        $('.stock-icon').addClass("glyphicon-ok").removeClass("glyphicon-remove").removeClass("glyphicon-tag")
+                                    } else {
+                                        $('.stock-icon').addClass("glyphicon-remove").removeClass("glyphicon-ok").removeClass("glyphicon-tag")
+                                    }
+                                });
+                            }else{
+                                $('.title').val('');
+                                $('.stock').val('');
+                                $('.price').val('');
+                                $('.stock-icon').removeClass("glyphicon-remove").removeClass("glyphicon-ok").addClass("glyphicon-tag")
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {

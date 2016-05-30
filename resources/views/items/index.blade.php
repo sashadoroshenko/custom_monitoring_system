@@ -96,27 +96,26 @@
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if(data.status == "error"){
-                            return;
-                        }
-                        var message = '';
-                        data.forEach(function (element, index, array) {
+                        if(data.length > 0) {
+                            var message = '';
+                            data.forEach(function (element, index, array) {
 
-                            if(element.status === 200) {
-                                message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
-                            }else{
-                                message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
-                            }
-                            message += "<br>";
-                        });
+                                if (element.status === 200) {
+                                    message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                                } else {
+                                    message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                                }
+                                message += "<br>";
+                            });
 
-                        swal({
-                            title: "<small class='text-danger'>Monitoring System Alerts <i class='glyphicon glyphicon-alert'></i></small>",
-                            text: message,
-                            html: true,
-                            timer: 10000
-                        });
+                            swal({
+                                title: "<small class='text-danger'>Monitoring System Alerts <i class='glyphicon glyphicon-alert'></i></small>",
+                                text: message,
+                                html: true,
+                                timer: 10000
+                            });
 //                        console.log(data);
+                        }
                         timedRefresh(60000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

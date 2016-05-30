@@ -42,14 +42,18 @@ class Walmart implements WalmartInterfase
         ];
 
         if (isset($ids) && !empty($ids)) {
-            $url .= "/" . $ids;
+            if (count(preg_split("/[\s,-]+/", $ids)) > 1) {
+                $query['ids'] = implode(',', preg_split("/[\s,-]+/", $ids));
+            } else {
+                $url .= "/" . $ids;
+            }
         }
 
-        if (isset($upc)) {
+        if (isset($upc) && !empty($upc)) {
             $query['upc'] = $upc;
         }
 
-        if (isset($lsPublisherId)) {
+        if (isset($lsPublisherId) && !empty($lsPublisherId)) {
             $query['lsPublisherId'] = $lsPublisherId;
         }
 
@@ -60,7 +64,7 @@ class Walmart implements WalmartInterfase
 
     /**
      * Provides reviews of the item
-     * 
+     *
      * @param $id
      * @param null $lsPublisherId
      * @param string $format
@@ -109,11 +113,11 @@ class Walmart implements WalmartInterfase
             'apiKey' => env('WALMART_API_KEY')
         ];
 
-        if (isset($lsPublisherId)) {
+        if (isset($lsPublisherId) && !empty($lsPublisherId)) {
             $query['lsPublisherId'] = $lsPublisherId;
         }
 
-        if (isset($categoryId)) {
+        if (isset($categoryId) && !empty($categoryId)) {
             $query['categoryId'] = $categoryId;
         }
 
@@ -121,11 +125,11 @@ class Walmart implements WalmartInterfase
             $query['facet'] = $facet;
 
 
-            if (isset($filter)) {
+            if (isset($filter) && !empty($filter)) {
                 $query['facet.filter'] = "brand:" . $filter;
             }
 
-            if (isset($range)) {
+            if (isset($range) && !empty($range)) {
                 $query['facet.range'] = "price:[ " . str_replace(" ", " TO ", $range) . " ]";
             }
         }
@@ -222,11 +226,11 @@ class Walmart implements WalmartInterfase
             'format' => $format,
             'apiKey' => env('WALMART_API_KEY')
         ];
-        
-        if (isset($lsPublisherId)) {
+
+        if (isset($lsPublisherId) && !empty($lsPublisherId)) {
             $query['lsPublisherId'] = $lsPublisherId;
         }
-        
+
         return $this->client->request("GET", "/v1/trends", [
             'query' => $query
         ]);
@@ -249,19 +253,19 @@ class Walmart implements WalmartInterfase
             'apiKey' => env('WALMART_API_KEY')
         ];
 
-        if (isset($lsPublisherId)) {
+        if (isset($lsPublisherId) && !empty($lsPublisherId)) {
             $query['lsPublisherId'] = $lsPublisherId;
         }
 
-        if (isset($category)) {
+        if (isset($category) && !empty($category)) {
             $query['category'] = $category;
         }
 
-        if (isset($brand)) {
+        if (isset($brand) && !empty($brand)) {
             $query['brand'] = $brand;
         }
 
-        if (isset($specialOffer)) {
+        if (isset($specialOffer) && !empty($specialOffer)) {
             $query['specialOffer'] = $specialOffer;
         }
 

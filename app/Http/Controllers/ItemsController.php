@@ -175,24 +175,18 @@ class ItemsController extends Controller
     {
         $items = Item::where('alert_desktop', 1)->get();
         if (count($items) == 0) {
-            return response()->json(['status' => 'error']);
+            return [];
         }
         $result = [];
         foreach ($items as $item) {
             $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
+
             if ($respons->salePrice != $item->price) {
                 $result[] = [
                     'status' => 404,
                     'itemID' => $item->itemID,
-                    'oldPrice' => (float) $item->price,
-                    'newPrice' => (float) $respons->salePrice
-                ];
-            } else {
-                $result[] = [
-                    'status' => 200,
-                    'itemID' => $item->itemID,
-                    'oldPrice' => (float) $item->price,
-                    'newPrice' => (float) $respons->salePrice
+                    'oldPrice' => (float)$item->price,
+                    'newPrice' => (float)$respons->salePrice
                 ];
             }
         }
@@ -208,6 +202,20 @@ class ItemsController extends Controller
 
     public function items()
     {
-        return $this->walmart->getItems(intval(request()->input('id', null)))->getBody();
+        $data = [];
+        $items = json_decode($this->walmart->getItems(request()->input('id', null))->getBody(), true);
+        if(isset($items['items'])) {
+            foreach ($items['items'] as $item) {
+                if (isset($item['marketplace']) && !$item['marketplace'] || isset($item['bestMarketplacePrice']) && $item['bestMarketplacePrice']) {
+                    $data[] = $item;
+                }
+            }
+        }else{
+            if (isset($items['marketplace']) && !$items['marketplace'] || isset($items['bestMarketplacePrice']) && $items['bestMarketplacePrice']) {
+                $data[] = $items;
+            }
+        }
+
+        return $data;
     }
 }

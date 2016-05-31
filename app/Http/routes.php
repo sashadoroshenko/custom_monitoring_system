@@ -50,7 +50,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('items/items', 'ItemsController@items');
 
+    Route::post('price-history/{id}', 'ItemsController@getPrices');
+    
     Route::resource('items', 'ItemsController');
+    
 
 });
 

@@ -9,22 +9,26 @@
     </div>
 </div>
 
-<div class="form-group {{ $errors->has('userID') ? 'has-error' : ''}}">
-    {!! Form::label('userID', 'User ID', ['class' => 'col-sm-3 control-label']) !!}
-    <div class="col-sm-6">
-        <div class="input-group">
-            {!! Form::text('userID', null, ['class' => 'form-control', 'placeholder' => 'Enter user ID']) !!}
-            <span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-user"></i></span>
-        </div>
-        {!! $errors->first('userID', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
+{{--<div class="form-group {{ $errors->has('userID') ? 'has-error' : ''}}">--}}
+    {{--{!! Form::label('userID', 'User ID', ['class' => 'col-sm-3 control-label']) !!}--}}
+    {{--<div class="col-sm-6">--}}
+        {{--<div class="input-group">--}}
+            {{--{!! Form::text('userID', null, ['class' => 'form-control', 'placeholder' => 'Enter user ID']) !!}--}}
+            {{--<span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-user"></i></span>--}}
+        {{--</div>--}}
+        {{--{!! $errors->first('userID', '<p class="help-block">:message</p>') !!}--}}
+    {{--</div>--}}
+{{--</div>--}}
 
 <div class="form-group {{ $errors->has('price') ? 'has-error' : ''}}">
     {!! Form::label('price', 'Price', ['class' => 'col-sm-3 control-label']) !!}
     <div class="col-sm-6">
         <div class="input-group">
-            {!! Form::text('price', null, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
+            @if(isset($item))
+                {!! Form::text('price', $item->prices->where('status', 1)->first()->price, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
+            @else
+                {!! Form::text('price', null, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
+            @endif
             <span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-usd"></i></span>
         </div>
         {!! $errors->first('price', '<p class="help-block">:message</p>') !!}

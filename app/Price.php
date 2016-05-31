@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Price extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'items';
+    protected $table = 'prices';
 
     /**
      * The database primary key value.
@@ -26,24 +26,13 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'itemID',
-        'userID',
-//        'price',
-        'title',
-        'stock',
-        'alert_desktop',
-        'alert_email',
-        'alert_sms',
+        'item_id',
+        'status',
+        'price'
     ];
 
-    public function user()
+    public function item()
     {
-        return $this->belongsTo(User::class);
-    }
-    
-    public function prices()
-    {
-        return $this->hasMany(Price::class);
+        return $this->belongsTo(Item::class);
     }
 }

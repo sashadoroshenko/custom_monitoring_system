@@ -20,8 +20,8 @@
                 <th>S.No</th>
                 <th> Item ID </th>
                 <th> Title </th>
-                <th> User ID </th>
-                <th> User </th>
+                {{--<th> User ID </th>--}}
+                {{--<th> User </th>--}}
                 <th> Price </th>
                 <th> Stock </th>
                 <th> Alert System </th>
@@ -36,9 +36,9 @@
                     <td>{{ $x }}</td>
                     <td>{{ $item->itemID }}</td>
                     <td>{{ $item->title }}</td>
-                    <td>{{ $item->userID }}</td>
-                    <td>{{ $item->user->name }}</td>
-                    <td>${{ $item->price }}</td>
+{{--                    <td>{{ $item->userID }}</td>--}}
+{{--                    <td>{{ $item->user->name }}</td>--}}
+                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice">${{ $item->prices->where('status', 1)->first()->price or "0" }}</a></td>
                     <td>{{ $item->stock }}</td>
                     <td>
                         <div class="checkbox">
@@ -78,6 +78,9 @@
         </table>
         <div class="pagination"> {!! $items->render() !!} </div>
     </div>
+
+    @include('layouts.partials.modal')
+
 @endsection
 @section('scripts')
     <script src="{{ asset('/js/jquery.dataTables.js') }}" type="text/javascript"></script>
@@ -126,6 +129,29 @@
             }
 
             $('#example').DataTable();
+
+
+            $('.showPrice').on('click', function (e) {
+                var id = $(this).attr('data-id');
+                var itemID = $(this).attr('data-item-id');
+                $.ajax({
+                    url: "/price-history/" + id,
+                    type: "POST",
+                    data: {
+                        id: id,
+                        _token: "{{csrf_token()}}"
+                    },
+                    dataType: "html",
+                    success: function (data, textStatus, jqXHR) {
+                        $('#modalTitle').html('Price history for <strong>' + itemID + '</strong> item!');
+                        $('#modalContent').html(data);
+                        $("#myModal").modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR)
+                    }
+                });
+            })
         });
 
     </script>

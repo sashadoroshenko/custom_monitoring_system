@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Item;
+use App\Price;
 use App\Services\Contractors\WalmartInterfase;
 use Illuminate\Http\Request;
 use Session;
@@ -79,7 +80,13 @@ class ItemsController extends Controller
             $data['alert_sms'] = 0;
         }
 
-        Item::create($data);
+        $item = Item::create($data);
+
+        Price::create([
+            'item_id' => $item->id,
+            'status' => 1,
+            'price' => $request->input('price')
+        ]);
 
         Session::flash('flash_message', 'Item added!');
 
@@ -181,11 +188,26 @@ class ItemsController extends Controller
         foreach ($items as $item) {
             $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
 
-            if ($respons->salePrice != $item->price) {
+            if ($respons->salePrice != $item->prices->where('status', 1)->first()->price) {
+//            if ($respons->salePrice != 0) {
+
+//                $prices = Price::whereStatus(1)->get();
+//
+//                foreach ($prices as $price){
+//                    $price->status = 0;
+//                    $price->save();
+//                }
+//
+//                Price::create([
+//                    'item_id' => $item->id,
+//                    'status' => 1,
+//                    'price' => $respons->salePrice
+//                ]);
+
                 $result[] = [
                     'status' => 404,
                     'itemID' => $item->itemID,
-                    'oldPrice' => (float)$item->price,
+                    'oldPrice' => (float)$item->prices->where('status', 1)->first()->price,
                     'newPrice' => (float)$respons->salePrice
                 ];
             }
@@ -204,18 +226,26 @@ class ItemsController extends Controller
     {
         $data = [];
         $items = json_decode($this->walmart->getItems(request()->input('id', null))->getBody(), true);
-        if(isset($items['items'])) {
+        if (isset($items['items'])) {
             foreach ($items['items'] as $item) {
-                if (isset($item['marketplace']) && !$item['marketplace'] || isset($item['bestMarketplacePrice']) && $item['bestMarketplacePrice']) {
-                    $data[] = $item;
+                if (isset($item['marketplace']) && $item['marketplace'] || isset($item['bestMarketplacePrice']) && !$item['bestMarketplacePrice']) {
+                    $items['stock'] = "Not Avalible";
                 }
+                $data[] = $item;
             }
-        }else{
-            if (isset($items['marketplace']) && !$items['marketplace'] || isset($items['bestMarketplacePrice']) && $items['bestMarketplacePrice']) {
-                $data[] = $items;
+        } else {
+            if (isset($items['marketplace']) && $items['marketplace'] || isset($items['bestMarketplacePrice']) && !$items['bestMarketplacePrice']) {
+                $items['stock'] = "Not Avalible";
             }
+            $data[] = $items;
         }
 
         return $data;
+    }
+
+    public function getPrices($id)
+    {
+        $prices = Item::findOrFail($id)->prices->sortByDesc('status')->sortByDesc('created_at');
+        return view('items.prices', compact('prices'))->render();
     }
 }

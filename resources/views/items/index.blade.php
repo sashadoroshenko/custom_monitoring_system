@@ -38,7 +38,7 @@
                     <td>{{ $item->title }}</td>
 {{--                    <td>{{ $item->userID }}</td>--}}
 {{--                    <td>{{ $item->user->name }}</td>--}}
-                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice">${{ $item->prices->where('status', 1)->first()->price or "0" }}</a></td>
+                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice">${{ $item->prices()->where('status', 1)->first()->price or "0" }}</a></td>
                     <td>{{ $item->stock }}</td>
                     <td>
                         <div class="checkbox">

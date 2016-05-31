@@ -188,7 +188,7 @@ class ItemsController extends Controller
         foreach ($items as $item) {
             $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
 
-            if ($respons->salePrice != $item->prices->where('status', 1)->first()->price) {
+            if ($respons->salePrice != $item->prices()->where('status', 1)->first()->price) {
 //            if ($respons->salePrice != 0) {
 
 //                $prices = Price::whereStatus(1)->get();
@@ -207,7 +207,7 @@ class ItemsController extends Controller
                 $result[] = [
                     'status' => 404,
                     'itemID' => $item->itemID,
-                    'oldPrice' => (float)$item->prices->where('status', 1)->first()->price,
+                    'oldPrice' => (float)$item->prices()->where('status', 1)->first()->price,
                     'newPrice' => (float)$respons->salePrice
                 ];
             }

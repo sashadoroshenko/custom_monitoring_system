@@ -25,7 +25,7 @@
     <div class="col-sm-6">
         <div class="input-group">
             @if(isset($item))
-                {!! Form::text('price', $item->prices->where('status', 1)->first()->price, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
+                {!! Form::text('price', $item->prices()->where('status', 1)->first()->price, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
             @else
                 {!! Form::text('price', null, ['class' => 'form-control price', 'placeholder' => 'Item price', 'readonly']) !!}
             @endif

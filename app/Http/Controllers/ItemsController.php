@@ -191,7 +191,7 @@ class ItemsController extends Controller
             if ($respons->salePrice != $item->prices()->where('status', 1)->first()->price) {
 //            if ($respons->salePrice != 0) {
 
-//                $prices = Price::whereStatus(1)->get();
+//                $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
 //
 //                foreach ($prices as $price){
 //                    $price->status = 0;
@@ -211,6 +211,64 @@ class ItemsController extends Controller
                     'newPrice' => (float)$respons->salePrice
                 ];
             }
+        }
+
+        return $result;
+    }
+
+    public function updateContent()
+    {
+        $items = Item::all();
+        if (count($items) == 0) {
+            return [];
+        }
+        $result = [];
+//        $result['stock'] = [];
+//        $result['items'] = [];
+        foreach ($items as $key => $item) {
+            $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
+
+            //updating price
+            if ($respons->salePrice != $item->prices()->where('status', 1)->first()->price) {
+//            if ($respons->salePrice != 0) {
+
+                $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
+
+                foreach ($prices as $price) {
+                    $price->status = 0;
+                    $price->save();
+                }
+
+                Price::create([
+                    'item_id' => $item->id,
+                    'status' => 1,
+                    'price' => $respons->salePrice
+                ]);
+
+                $result['items'][] = [
+                    'status' => 404,
+                    'id' => $item->id,
+                    'itemID' => $item->itemID,
+                    'oldValue' => (float)$item->prices()->where('status', 1)->first()->price,
+                    'newValue' => (float)$respons->salePrice
+                ];
+            }
+
+            //updating stock
+            if ($respons->stock != $item->stock) {
+
+                $result['stock'][] = [
+                    'status' => 404,
+                    'id' => $item->id,
+                    'itemID' => $item->itemID,
+                    'oldValue' => $item->stock,
+                    'newValue' => $respons->stock
+                ];
+
+                $item->stock = $respons->stock;
+                $item->save();
+            }
+
         }
 
         return $result;

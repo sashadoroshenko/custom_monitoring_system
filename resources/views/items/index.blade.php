@@ -38,8 +38,8 @@
                     <td>{{ $item->title }}</td>
 {{--                    <td>{{ $item->userID }}</td>--}}
 {{--                    <td>{{ $item->user->name }}</td>--}}
-                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice">${{ $item->prices()->where('status', 1)->first()->price or "0" }}</a></td>
-                    <td>{{ $item->stock }}</td>
+                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice price {{$item->id}}">${{ $item->prices()->where('status', 1)->first()->price or "0" }}</a></td>
+                    <td class="stock {{$item->id}}">{{ $item->stock }}</td>
                     <td>
                         <div class="checkbox">
                             <label><i class="glyphicon @if($item->alert_desktop)  glyphicon-check @else glyphicon-unchecked @endif"></i> : Desktop</label>
@@ -87,12 +87,18 @@
     <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            timedRefresh(1000);
-            function timedRefresh(timeoutPeriod) {
-                setTimeout(Update, timeoutPeriod);
+//            timedRefresh(1000);
+            refreshContent(1000);
+
+            function timedRefresh(alertTimeout) {
+                setTimeout(showAlert, alertTimeout);
             }
 
-            function Update() {
+            function refreshContent(updateTimeout) {
+                setTimeout(updateContent, updateTimeout);
+            }
+
+            function showAlert() {
                 $.ajax({
                     url: "{{url('items/showDesktopAlerts')}}",
                     type: "POST",
@@ -104,9 +110,9 @@
                             data.forEach(function (element, index, array) {
 
                                 if (element.status === 200) {
-                                    message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                                    message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newValue + "</strong>, Old Price - <strong>" + element.oldValue + "</strong>";
                                 } else {
-                                    message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newPrice + "</strong>, Old Price - <strong>" + element.oldPrice + "</strong>";
+                                    message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newValue + "</strong>, Old Price - <strong>" + element.oldValue + "</strong>";
                                 }
                                 message += "<br>";
                             });
@@ -122,7 +128,42 @@
                         timedRefresh(60000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR)
+                        console.log(jqXHR);
+                        timedRefresh(60000);
+                    }
+                });
+
+            }
+
+            function updateContent() {
+                $.ajax({
+                    url: "{{url('items/updateContent')}}",
+                    type: "POST",
+                    data: { _token: "{{csrf_token()}}"},
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                        if(!$.isEmptyObject(data)) {
+                            var stock = data.stock;
+                            var items = data.items;
+                            if(!$.isEmptyObject(stock)) {
+                                stock.forEach(function (element, index, array) {
+                                    $('#example').find(".stock." + element.id).html(element.newValue);
+                                });
+                            }
+
+                            if(!$.isEmptyObject(items)){
+                                items.forEach(function (element, index, array) {
+                                    $('#example').find(".price." + element.id).html('$' + element.newValue);
+                                });
+                            }
+                        }
+//                        console.log(data);
+                        refreshContent(60000);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('error');
+                        console.log(jqXHR);
+                        refreshContent(60000);
                     }
                 });
 

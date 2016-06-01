@@ -19,12 +19,16 @@
                 <td> {{ $item->title }} </td>
             </tr>
             <tr>
-                <th> User ID </th>
-                <td> {{ $item->userID }} </td>
-            </tr>
-            <tr>
                 <th> Price </th>
-                <td> {{ $item->price }} </td>
+                <td>
+                    <ol>
+                        @foreach($item->prices()->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get() as $price)
+                            <li>
+                                <span class="label @if($price->status) label-primary @else label-warning @endif">{{$price->price}}</span>
+                            </li>
+                        @endforeach
+                    </ol>
+                </td>
             </tr>
             <tr>
                 <th> Stock </th>

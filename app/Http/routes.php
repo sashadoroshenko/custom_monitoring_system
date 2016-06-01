@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::post('items/showDesktopAlerts', 'ItemsController@showDesktopAlerts');
+    Route::post('items/updateContent', 'ItemsController@updateContent');
 
     Route::post('items/items', 'ItemsController@items');
 

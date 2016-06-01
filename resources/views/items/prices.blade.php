@@ -4,6 +4,7 @@
         <th>S.No</th>
         <th>Status</th>
         <th>Price</th>
+        <th>Created date</th>
         <th>Updated date</th>
     </tr>
     </thead>
@@ -17,6 +18,7 @@
                 <td>{{ $price->status ? "Active" : "Inactive" }}</td>
                 <td>${{ $price->price }}</td>
                 <td>{{ $price->created_at }}</td>
+                <td>{{ $price->created_at == $price->updated_at ? '-' : $price->updated_at }}</td>
             </tr>
         @endforeach
     @else

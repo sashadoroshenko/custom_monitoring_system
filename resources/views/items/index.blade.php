@@ -87,7 +87,7 @@
     <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-//            timedRefresh(1000);
+            timedRefresh(1000);
             refreshContent(1000);
 
             function timedRefresh(alertTimeout) {

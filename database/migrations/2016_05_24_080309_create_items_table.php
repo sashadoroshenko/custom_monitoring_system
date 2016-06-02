@@ -16,8 +16,8 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('itemID');
-            $table->string('userID');
-            $table->string('price');
+//            $table->string('userID');
+//            $table->string('price');
             $table->string('title');
             $table->string('stock');
             $table->boolean('alert_desktop')->nullable();

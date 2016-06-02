@@ -96,6 +96,8 @@
         </div>
     </nav>
 
+    @include('layouts.partials.errors')
+
     <div class="container-fluid">
         @yield('content')
     </div>

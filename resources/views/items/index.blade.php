@@ -87,8 +87,8 @@
     <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            timedRefresh(1000);
-            refreshContent(1000);
+//            timedRefresh(1000);
+            refreshContent(5000);
 
             function timedRefresh(alertTimeout) {
                 setTimeout(showAlert, alertTimeout);
@@ -142,20 +142,24 @@
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if(!$.isEmptyObject(data)) {
+                        if (!$.isEmptyObject(data)) {
+                        console.log(data);
                             var stock = data.stock;
-                            var items = data.items;
-                            if(!$.isEmptyObject(stock)) {
-                                stock.forEach(function (element, index, array) {
-                                    $('#example').find(".stock." + element.id).html(element.newValue);
-                                });
-                            }
+                            var price = data.price;
+                            console.log($.isEmptyObject(stock))
+                            stock.forEach(function (element, index, array) {
+                                if (!$.isEmptyObject(element)) {
+                                    console.log(element)
+                                    $('#example').find(".stock." + element[0].id).html(element[0].newValue);
+                                }
+                            });
 
-                            if(!$.isEmptyObject(items)){
-                                items.forEach(function (element, index, array) {
-                                    $('#example').find(".price." + element.id).html('$' + element.newValue);
-                                });
-                            }
+                            price.forEach(function (element, index, array) {
+                                if (!$.isEmptyObject(element)) {
+                                    console.log(element)
+                                    $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
+                                }
+                            });
                         }
 //                        console.log(data);
                         refreshContent(60000);

@@ -298,6 +298,9 @@ class ItemsController extends Controller
 
     private function getStock($response, $item)
     {
+        if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
+            $response['stock'] = "Not Avalible";
+        }
         $result = [];
 //        if ($response['stock'] != $item->stock) {
 

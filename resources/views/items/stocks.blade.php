@@ -3,22 +3,22 @@
     <tr>
         <th>S.No</th>
         <th>Status</th>
-        <th>Price</th>
+        <th>Stock</th>
         <th>Created date</th>
         <th>Updated date</th>
     </tr>
     </thead>
     <tbody>
-    @if(!$prices->isEmpty())
+    @if(!$stocks->isEmpty())
         {{-- */$x=0;/* --}}
-        @foreach($prices as $price)
+        @foreach($stocks as $stock)
             {{-- */$x++;/* --}}
             <tr>
                 <td>{{ $x }}</td>
-                <td>{{ $price->status ? "Active" : "Inactive" }}</td>
-                <td>${{ $price->price }}</td>
-                <td>{{ $price->created_at }}</td>
-                <td>{{ $price->created_at == $price->updated_at ? '-' : $price->updated_at }}</td>
+                <td>{{ $stock->status ? "Active" : "Inactive" }}</td>
+                <td>{{ $stock->stock }}</td>
+                <td>{{ $stock->created_at }}</td>
+                <td>{{ $stock->created_at == $stock->updated_at ? '-' : $stock->updated_at }}</td>
             </tr>
         @endforeach
     @else

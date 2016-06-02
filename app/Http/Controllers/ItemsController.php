@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Item;
 use App\Price;
 use App\Services\Contractors\WalmartInterfase;
+use App\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Session;
 
 class ItemsController extends Controller
@@ -229,13 +231,13 @@ class ItemsController extends Controller
         if (isset($items['items'])) {
             foreach ($items['items'] as $item) {
                 if (isset($item['marketplace']) && $item['marketplace'] || isset($item['bestMarketplacePrice']) && !$item['bestMarketplacePrice']) {
-                    $items['stock'] = "Not Avalible";
+                    $items['stock'] = "Not Available";
                 }
                 $data[] = $item;
             }
         } else {
             if (isset($items['marketplace']) && $items['marketplace'] || isset($items['bestMarketplacePrice']) && !$items['bestMarketplacePrice']) {
-                $items['stock'] = "Not Avalible";
+                $items['stock'] = "Not Available";
             }
             $data[] = $items;
         }
@@ -243,8 +245,13 @@ class ItemsController extends Controller
         return $data;
     }
 
-    public function getPrices($id)
+    public function getHistories($id)
     {
+        if(request()->input('type') == 'stock') {
+            $stocks = Item::findOrFail($id)->stocks->sortByDesc('status');
+            return view('items.stocks', compact('stocks'))->render();
+        }
+        
         $prices = Item::findOrFail($id)->prices->sortByDesc('status');
         return view('items.prices', compact('prices'))->render();
     }
@@ -299,22 +306,63 @@ class ItemsController extends Controller
     private function getStock($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
-            $response['stock'] = "Not Avalible";
+            $response['stock'] = "Not Available";
         }
         $result = [];
-//        if ($response['stock'] != $item->stock) {
+
+        if ($item->stocks()->where('status', 1)->get()->isEmpty()) {
+            Stock::create([
+                'item_id' => $item->id,
+                'status' => 1,
+                'stock' => $response['stock']
+            ]);
 
             $result[] = [
                 'status' => 404,
                 'id' => $item->id,
                 'itemID' => $item->itemID,
-                'oldValue' => $item->stock,
+                'oldValue' => 0,
                 'newValue' => $response['stock']
             ];
+        }else{
+            if ($response['stock'] != $item->stocks()->where('status', 1)->first()->stock) {
 
-            $item->stock = $response['stock'];
-            $item->save();
-//        }
+                $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
+
+                foreach ($stocks as $stock) {
+                    $stock->status = 0;
+                    $stock->save();
+                }
+
+                $oldStock = $stocks->last()->stock;
+
+                Stock::create([
+                    'item_id' => $item->id,
+                    'status' => 1,
+                    'stock' => $response['stock']
+                ]);
+
+                $result[] = [
+                    'status' => 404,
+                    'id' => $item->id,
+                    'itemID' => $item->itemID,
+                    'oldValue' => $oldStock,
+                    'newValue' => $response['stock']
+                ];
+            } else {
+                $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
+
+                foreach ($stocks as $stock) {
+                    $result[] = [
+                        'status' => 404,
+                        'id' => $item->id,
+                        'itemID' => $item->itemID,
+                        'oldValue' => $response['stock'],
+                        'newValue' => $response['stock']
+                    ];
+                }
+            }
+        }
 
         return $result;
     }
@@ -339,7 +387,7 @@ class ItemsController extends Controller
                 'oldValue' => 0,
                 'newValue' => (float)$response['salePrice']
             ];
-        }else {
+        } else {
             if ($response['salePrice'] != $item->prices()->where('status', 1)->first()->price) {
 
                 $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
@@ -364,7 +412,7 @@ class ItemsController extends Controller
                     'oldValue' => (float)$oldPrice,
                     'newValue' => (float)$response['salePrice']
                 ];
-            }else{
+            } else {
                 $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
 
                 foreach ($prices as $price) {
@@ -380,6 +428,16 @@ class ItemsController extends Controller
         }
 
         return $result;
+    }
+
+    public function sendMail()
+    {
+        Mail::send('auth.emails.notification', [], function ($m) {
+
+            //$m->from('hello@app.com', 'Your Application');
+            $m->to(auth()->user()->email)->subject('Hello!');
+
+        });
     }
 
 }

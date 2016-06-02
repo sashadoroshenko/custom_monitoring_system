@@ -31,7 +31,7 @@ class Item extends Model
 //        'userID',
 //        'price',
         'title',
-        'stock',
+//        'stock',
         'alert_desktop',
         'alert_email',
         'alert_sms',
@@ -45,5 +45,10 @@ class Item extends Model
     public function prices()
     {
         return $this->hasMany(Price::class);
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
     }
 }

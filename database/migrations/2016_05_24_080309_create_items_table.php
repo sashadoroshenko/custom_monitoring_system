@@ -19,7 +19,7 @@ class CreateItemsTable extends Migration
 //            $table->string('userID');
 //            $table->string('price');
             $table->string('title');
-            $table->string('stock');
+//            $table->string('stock');
             $table->boolean('alert_desktop')->nullable();
             $table->boolean('alert_email')->nullable();
             $table->boolean('alert_sms')->nullable();

@@ -25,6 +25,7 @@
                 <th> Price </th>
                 <th> Stock </th>
                 <th> Alert System </th>
+                <th> Last Update </th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -38,8 +39,17 @@
                     <td>{{ $item->title }}</td>
 {{--                    <td>{{ $item->userID }}</td>--}}
 {{--                    <td>{{ $item->user->name }}</td>--}}
-                    <td><a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice price {{$item->id}}">${{ $item->prices()->where('status', 1)->first()->price or "0" }}</a></td>
-                    <td class="stock {{$item->id}}">{{ $item->stock }}</td>
+                    <td>
+                        <a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showPrice price {{$item->id}}">
+                            ${{ $item->prices()->where('status', 1)->first()->price or "0" }}
+                        </a>
+                    </td>
+                    <td>
+                        <a data-id="{{ $item->id }}" data-item-id="{{ $item->itemID }}" href="#" class="showStock stock {{$item->id}}">
+                            {{ $item->stocks()->where('status', 1)->first()->stock or "Not Available" }}
+                        </a>
+{{--                        {{ $item->stock }}--}}
+                    </td>
                     <td>
                         <div class="checkbox">
                             <label><i class="glyphicon @if($item->alert_desktop)  glyphicon-check @else glyphicon-unchecked @endif"></i> : Desktop</label>
@@ -51,6 +61,9 @@
                             <label><i class="glyphicon @if($item->alert_sms)  glyphicon-check @else glyphicon-unchecked @endif"></i> : SMS</label>
                         </div>
 
+                    </td>
+                    <td>
+                        {{$item->updated_at}}
                     </td>
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
@@ -149,14 +162,12 @@
                             console.log($.isEmptyObject(stock))
                             stock.forEach(function (element, index, array) {
                                 if (!$.isEmptyObject(element)) {
-                                    console.log(element)
                                     $('#example').find(".stock." + element[0].id).html(element[0].newValue);
                                 }
                             });
 
                             price.forEach(function (element, index, array) {
                                 if (!$.isEmptyObject(element)) {
-                                    console.log(element)
                                     $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
                                 }
                             });
@@ -176,20 +187,33 @@
             $('#example').DataTable();
 
 
-            $('.showPrice').on('click', function (e) {
+            $('.showPrice, .showStock').on('click', function (e) {
+                var type = '';
+                if($(this).hasClass('price')){
+                    type = 'price';
+                }else{
+                    type = 'stock';
+                }
                 var id = $(this).attr('data-id');
                 var itemID = $(this).attr('data-item-id');
                 $.ajax({
-                    url: "/price-history/" + id,
+                    url: "/history/" + id,
                     type: "POST",
                     data: {
                         id: id,
-                        _token: "{{csrf_token()}}"
+                        _token: "{{csrf_token()}}",
+                        type: type
                     },
                     dataType: "html",
                     success: function (data, textStatus, jqXHR) {
-                        $('#modalTitle').html('Price history for <strong>' + itemID + '</strong> item!');
-                        $('#modalContent').html(data);
+                        if(type == 'price') {
+                            $('#modalTitle').html('Price history for <strong>' + itemID + '</strong> item!');
+                            $('#modalContent').html(data);
+                        }
+                        if(type == 'stock'){
+                            $('#modalTitle').html('Stock history for <strong>' + itemID + '</strong> item!');
+                            $('#modalContent').html(data);
+                        }
                         $("#myModal").modal('show');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

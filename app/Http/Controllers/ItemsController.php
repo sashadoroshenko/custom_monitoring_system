@@ -321,6 +321,9 @@ class ItemsController extends Controller
 
     private function getPrice($response, $item)
     {
+        if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
+            $response['salePrice'] = 0;
+        }
         $result = [];
         if ($item->prices()->where('status', 1)->get()->isEmpty()) {
             Price::create([

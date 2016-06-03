@@ -7,10 +7,10 @@ use App\Http\Controllers\Controller;
 
 use App\Item;
 use App\Price;
+use App\Services\Contractors\NotificationsInterfase;
 use App\Services\Contractors\WalmartInterfase;
 use App\Stock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Session;
 
 class ItemsController extends Controller
@@ -19,14 +19,21 @@ class ItemsController extends Controller
      * @var WalmartInterfase
      */
     protected $walmart;
+    
+    /**
+     * @var NotificationsInterfase
+     */
+    protected $notifications;
 
     /**
      * HomeController constructor.
      * @param WalmartInterfase $walmartInterfase
+     * @param NotificationsInterfase $notificationsInterfase
      */
-    public function __construct(WalmartInterfase $walmartInterfase)
+    public function __construct(WalmartInterfase $walmartInterfase, NotificationsInterfase $notificationsInterfase)
     {
         $this->walmart = $walmartInterfase;
+        $this->notifications = $notificationsInterfase;
     }
 
     /**
@@ -88,6 +95,12 @@ class ItemsController extends Controller
             'item_id' => $item->id,
             'status' => 1,
             'price' => $request->input('price')
+        ]);
+
+        Stock::create([
+            'item_id' => $item->id,
+            'status' => 1,
+            'stock' => $request->input('stock')
         ]);
 
         Session::flash('flash_message', 'Item added!');
@@ -180,6 +193,9 @@ class ItemsController extends Controller
         return redirect('items');
     }
 
+    /**
+     * @return array
+     */
     public function showDesktopAlerts()
     {
         $items = Item::where('alert_desktop', 1)->get();
@@ -245,6 +261,12 @@ class ItemsController extends Controller
         return $data;
     }
 
+    /**
+     * @param $id
+     * @return string
+     * @throws \Exception
+     * @throws \Throwable
+     */
     public function getHistories($id)
     {
         if(request()->input('type') == 'stock') {
@@ -256,6 +278,9 @@ class ItemsController extends Controller
         return view('items.prices', compact('prices'))->render();
     }
 
+    /**
+     * @return array
+     */
     public function updateContent()
     {
         $items = Item::with('prices')->get();
@@ -303,6 +328,11 @@ class ItemsController extends Controller
         return $result;
     }
 
+    /**
+     * @param $response
+     * @param $item
+     * @return array
+     */
     private function getStock($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
@@ -342,6 +372,24 @@ class ItemsController extends Controller
                     'stock' => $response['stock']
                 ]);
 
+                $alerts = Item::all();
+                foreach ($alerts as $alert){
+                    $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
+                    $title = $response['name'];
+                    if ($alert->alert_email) {
+                        if ($alert->itemID == $item->itemID) {
+                            $this->notifications->sendEmail($item->itemID, $response['stock'], $oldStock, $title, $url, 'stock');
+                        }
+                    }
+
+                    if ($alert->alert_sms){
+                        if ($alert->itemID == $item->itemID) {
+                            $message = "Item with ID {$item->itemID} change stock. Old stock {$oldStock} new stock {$response['stock']}. {$url}";
+                            $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
+                        }
+                    }
+                }
+
                 $result[] = [
                     'status' => 404,
                     'id' => $item->id,
@@ -349,6 +397,7 @@ class ItemsController extends Controller
                     'oldValue' => $oldStock,
                     'newValue' => $response['stock']
                 ];
+
             } else {
                 $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
 
@@ -367,6 +416,11 @@ class ItemsController extends Controller
         return $result;
     }
 
+    /**
+     * @param $response
+     * @param $item
+     * @return array
+     */
     private function getPrice($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
@@ -405,6 +459,23 @@ class ItemsController extends Controller
                     'price' => $response['salePrice']
                 ]);
 
+                $alerts = Item::all();
+                foreach ($alerts as $alert){
+                    $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
+                    $title = $response['name'];
+                    if ($alert->alert_email) {
+                        if ($alert->itemID == $item->itemID) {
+                            $this->notifications->sendEmail($item->itemID, $response['salePrice'], $oldPrice, $title, $url, 'price');
+                        }
+                    }
+                    if ($alert->alert_sms){
+                        if ($alert->itemID == $item->itemID) {
+                            $message = "Item with ID {$item->itemID} change price. Old price {$oldPrice} new price {$response['salePrice']}. {$url}";
+                            $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
+                        }
+                    }
+                }
+
                 $result[] = [
                     'status' => 404,
                     'id' => $item->id,
@@ -429,15 +500,4 @@ class ItemsController extends Controller
 
         return $result;
     }
-
-    public function sendMail()
-    {
-        Mail::send('auth.emails.notification', [], function ($m) {
-
-            //$m->from('hello@app.com', 'Your Application');
-            $m->to(auth()->user()->email)->subject('Hello!');
-
-        });
-    }
-
 }

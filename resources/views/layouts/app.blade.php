@@ -95,8 +95,9 @@
             </div>
         </div>
     </nav>
-
-    @include('layouts.partials.errors')
+    @if(auth()->check())
+        @include('layouts.partials.errors')
+    @endif
 
     <div class="container-fluid">
         @yield('content')

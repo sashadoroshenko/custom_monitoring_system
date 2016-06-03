@@ -91,6 +91,10 @@
         </table>
         <div class="pagination"> {!! $items->render() !!} </div>
     </div>
+    <audio id="myAudio" controls style="display: none">
+        <source src="/sounds/sound1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     @include('layouts.partials.modal')
 
@@ -156,21 +160,29 @@
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
                         if (!$.isEmptyObject(data)) {
-                        console.log(data);
+//                        console.log(data);
                             var stock = data.stock;
                             var price = data.price;
-                            console.log($.isEmptyObject(stock))
-                            stock.forEach(function (element, index, array) {
-                                if (!$.isEmptyObject(element)) {
-                                    $('#example').find(".stock." + element[0].id).html(element[0].newValue);
-                                }
-                            });
 
-                            price.forEach(function (element, index, array) {
-                                if (!$.isEmptyObject(element)) {
-                                    $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
-                                }
-                            });
+                            if(stock.length > 1) {
+                                stock.forEach(function (element, index, array) {
+                                    if (!$.isEmptyObject(element)) {
+                                        $('#example').find(".stock." + element[0].id).html(element[0].newValue);
+                                    }
+                                });
+                            }else{
+                                $('#example').find(".stock." + stock[0].id).html(stock[0].newValue);
+                            }
+                            if(price.length > 1) {
+                                price.forEach(function (element, index, array) {
+                                    if (!$.isEmptyObject(element)) {
+                                        $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
+                                    }
+                                });
+                            }else{
+                                $('#example').find(".price." + price[0].id).html('$' + price[0].newValue);
+                            }
+                            document.getElementById("myAudio").play();
                         }
 //                        console.log(data);
                         refreshContent(60000);

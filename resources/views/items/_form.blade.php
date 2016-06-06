@@ -57,6 +57,17 @@
     </div>
 </div>
 
+<div class="form-group {{ $errors->has('url') ? 'has-error' : ''}}">
+    {!! Form::label('url', 'Item url', ['class' => 'col-sm-3 control-label']) !!}
+    <div class="col-sm-6">
+        <div class="input-group">
+            {!! Form::text('url', null, ['class' => 'form-control url', 'placeholder' => 'Item url', 'readonly']) !!}
+            <span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-tag"></i></span>
+        </div>
+        {!! $errors->first('url', '<p class="help-block">:message</p>') !!}
+    </div>
+</div>
+
 <div class="form-group">
     {!! Form::label('alert', 'Alert System', ['class' => 'col-sm-3 control-label']) !!}
     <div class="col-sm-6">
@@ -96,9 +107,12 @@
                         dataType: "json",
                         success: function (data, textStatus, jqXHR) {
                             console.log(data);
+                            console.log(1);
                             if(data.length != 0) {
                                 data.forEach(function (value, index, array) {
+                                    console.log(value)
                                     $('.title').val(value.name);
+                                    $('.url').val(value.productUrl);
                                     $('.stock').val(value.stock);
                                     $('.price').val(value.salePrice);
                                     if (value.stock === "Available") {
@@ -115,7 +129,9 @@
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR)
+                            alert(jqXHR.responseText);
+                            console.log('error');
+                            console.log(jqXHR);
                         }
                     });
                 }

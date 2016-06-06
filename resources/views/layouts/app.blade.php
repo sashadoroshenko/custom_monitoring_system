@@ -51,6 +51,7 @@
                     <li><a href="{{ url('/home') }}">Home</a></li>
                     @if (!Auth::guest())
                         <li><a href="{{ url('/items') }}">Items</a></li>
+                        <li><a href="{{ url('/walmart-api-keys') }}">Walmart API Keys</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Walmart functionality <span class="caret"></span>
@@ -106,6 +107,7 @@
     <!-- JavaScripts -->
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/moment-with-locales.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert-dev.js') }}"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
     @yield('scripts')

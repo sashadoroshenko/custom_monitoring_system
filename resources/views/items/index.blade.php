@@ -6,12 +6,16 @@
         .checkbox {
             display: block !important;
         }
+        #last-updated-text{
+            font-size: medium;
+        }
     </style>
 
     <h1>Items
         <a href="{{ url('/items/create') }}" class="btn btn-primary btn-xs" title="Add New Item">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"/>
         </a>
+        <span id="last-updated-text" class="pull-right">Last Updated: <span id="last-updated-date-time"></span></span>
     </h1>
     <div class="table">
         <table id="example" class="table table-bordered table-striped table-hover">
@@ -36,7 +40,7 @@
                 <tr>
                     <td>{{ $x }}</td>
                     <td>{{ $item->itemID }}</td>
-                    <td>{{ $item->title }}</td>
+                    <td><a href="{{ $item->url }}" target="_blank">{{ $item->title }}</a></td>
 {{--                    <td>{{ $item->userID }}</td>--}}
 {{--                    <td>{{ $item->user->name }}</td>--}}
                     <td>
@@ -62,9 +66,7 @@
                         </div>
 
                     </td>
-                    <td>
-                        {{$item->updated_at}}
-                    </td>
+                    <td class="updated-at" data-updated-at="{{$item->updated_at}}"></td>
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
@@ -89,7 +91,6 @@
             @endforeach
             </tbody>
         </table>
-        <div class="pagination"> {!! $items->render() !!} </div>
     </div>
     <audio id="myAudio" controls style="display: none">
         <source src="/sounds/sound1.mp3" type="audio/mpeg">
@@ -104,8 +105,13 @@
     <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#example').DataTable({
+                "pageLength": 50
+            });
+            //initialize functions for first start
 //            timedRefresh(1000);
             refreshContent(5000);
+            updateDates();
 
             function timedRefresh(alertTimeout) {
                 setTimeout(showAlert, alertTimeout);
@@ -114,6 +120,25 @@
             function refreshContent(updateTimeout) {
                 setTimeout(updateContent, updateTimeout);
             }
+
+            //update date to human using moment js
+            function updateDates() {
+                var updated = $('.updated-at');
+                updated.each(function () {
+                    var d = moment();
+                    var a = moment($(this).attr('data-updated-at'));
+                    var human = d.to(a);
+                    $(this).text(human)
+                });
+
+                //store latest updated date into loacal storage
+                if(typeof(Storage) !== "undefined") {
+                    localStorage.lastUpdatedTime = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+                    $('#last-updated-date-time').html(localStorage.lastUpdatedTime)
+                }
+
+            }
+
 
             function showAlert() {
                 $.ajax({
@@ -152,6 +177,7 @@
 
             }
 
+            //update content functionality
             function updateContent() {
                 $.ajax({
                     url: "{{url('items/updateContent')}}",
@@ -183,6 +209,7 @@
                                 $('#example').find(".price." + price[0].id).html('$' + price[0].newValue);
                             }
                             document.getElementById("myAudio").play();
+                            updateDates();
                         }
 //                        console.log(data);
                         refreshContent(60000);
@@ -196,9 +223,7 @@
 
             }
 
-            $('#example').DataTable();
-
-
+            //modal for price and stock history
             $('.showPrice, .showStock').on('click', function (e) {
                 var type = '';
                 if($(this).hasClass('price')){

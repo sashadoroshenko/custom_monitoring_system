@@ -57,8 +57,8 @@ class NotificationsClass implements NotificationsInterfase
             'title' => $title,
             'url' => $url,
             'type' => $type
-        ], function ($m) {
-            $m->to(auth()->user()->email)->subject('Hello!');
+        ], function ($m) use($title){
+            $m->to(auth()->user()->email)->subject($title);
         });
     }
 }

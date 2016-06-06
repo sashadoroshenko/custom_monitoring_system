@@ -43,7 +43,7 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $items = Item::paginate(15);
+        $items = Item::all();
 
         return view('items.index', compact('items'));
     }
@@ -69,6 +69,7 @@ class ItemsController extends Controller
             'itemID' => 'required',
 //            'userID' => 'required',
             'price' => 'required',
+            'url' => 'required',
             'title' => 'required',
             'stock' => 'required'
         ]);
@@ -149,6 +150,7 @@ class ItemsController extends Controller
             'itemID' => 'required',
 //            'userID' => 'required',
             'price' => 'required',
+            'url' => 'required',
             'title' => 'required',
             'stock' => 'required'
         ]);
@@ -204,9 +206,14 @@ class ItemsController extends Controller
         }
         $result = [];
         foreach ($items as $item) {
-            $respons = json_decode($this->walmart->getItems($item->itemID)->getBody());
 
-            if ($respons->salePrice != $item->prices()->where('status', 1)->first()->price) {
+            $response = $this->walmart->getItems($item->itemID);
+            if($response->getStatusCode() != 200){
+                return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
+            }
+            $response = json_decode($response->getBody());
+
+            if ($response->salePrice != $item->prices()->where('status', 1)->first()->price) {
 //            if ($respons->salePrice != 0) {
 
 //                $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
@@ -226,7 +233,7 @@ class ItemsController extends Controller
                     'status' => 404,
                     'itemID' => $item->itemID,
                     'oldPrice' => (float)$item->prices()->where('status', 1)->first()->price,
-                    'newPrice' => (float)$respons->salePrice
+                    'newPrice' => (float)$response->salePrice
                 ];
             }
         }
@@ -243,7 +250,12 @@ class ItemsController extends Controller
     public function items()
     {
         $data = [];
-        $items = json_decode($this->walmart->getItems(request()->input('id', null))->getBody(), true);
+        $response = $this->walmart->getItems(request()->input('id', null));
+        if($response->getStatusCode() != 200){
+            return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
+        }
+        $items = json_decode($response->getBody(), true);
+
         if (isset($items['items'])) {
             foreach ($items['items'] as $item) {
                 if (isset($item['marketplace']) && $item['marketplace'] || isset($item['bestMarketplacePrice']) && !$item['bestMarketplacePrice']) {
@@ -294,7 +306,12 @@ class ItemsController extends Controller
             foreach ($items as $key => $item) {
                 $ids = implode(',', collect($item)->pluck(['itemID'])->all());
 
-                $response = json_decode($this->walmart->getItems($ids)->getBody(), true);
+                $response = $this->walmart->getItems($ids);
+                if($response->getStatusCode() != 200){
+                    return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
+                }
+
+                $response = json_decode($response->getBody(), true);
 
                 foreach ($response['items'] as $k => $v) {
                     foreach ($item as $vv) {
@@ -316,7 +333,12 @@ class ItemsController extends Controller
         } else {
             foreach ($items as $key => $item) {
 
-                $response = json_decode($this->walmart->getItems($item->itemID)->getBody(), true);
+                $response = $this->walmart->getItems($item->itemID);
+                if($response->getStatusCode() != 200){
+                    return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
+                }
+
+                $response = json_decode($response->getBody(), true);
                 //updating price
                 $result['price'] = $this->getPrice($response, $item);
 

@@ -51,13 +51,19 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('items/items', 'ItemsController@items');
     //Route::get('items/sendMail', 'ItemsController@sendMail');
-//    Route::get('items/twilio', function (\App\Services\Contractors\NotificationsInterfase $notificationsInterfase){
-//        return $notificationsInterfase->sendSMS();
-//    });
+    
+    Route::get('twilio', function (\App\Services\Contractors\NotificationsInterfase $notificationsInterfase){
+        $number = "+15005550006";
+        $message = str_split("http://" . explode('=http://', urldecode("http://c.affil.walmart.com/t/api01?l=http%3A%2F%2Fwww.walmart.com%2Fip%2FOzark-Trail-30-Ounce-Double-Wall-Vacuum-Sealed-Tumbler%2F49772708%3Faffp1%3DgpaSHUa_7RD1lrZUr7vIj0Mt6eORRwuSa3Y5aFkVuwQ%26affilsrc%3Dapi%26veh%3Daff%26wmlspartner%3Dreadonlyapi"))[1], 159);
+
+        return $notificationsInterfase->sendSMS($number, $message);
+    });
 
     Route::post('history/{id}', 'ItemsController@getHistories');
     
     Route::resource('items', 'ItemsController');
+
+    Route::resource('walmart-api-keys', 'WalmartApiKeysController');
     
 
 });
@@ -65,8 +71,8 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('test', function (){
 
     $test = urldecode("http://c.affil.walmart.com/t/api01?l=http%3A%2F%2Fwww.walmart.com%2Fip%2FOzark-Trail-30-Ounce-Double-Wall-Vacuum-Sealed-Tumbler%2F49772708%3Faffp1%3DgpaSHUa_7RD1lrZUr7vIj0Mt6eORRwuSa3Y5aFkVuwQ%26affilsrc%3Dapi%26veh%3Daff%26wmlspartner%3Dreadonlyapi");
-    $test = "http://" . explode('=http://', $test)[1];
-    dd(strlen($test));
+    $test = str_split("http://" . explode('=http://', $test)[1], 159);
+    dd($test);
 
     $collection = collect([
         ['product_id' => 'prod-100', 'name' => 'Desk'],

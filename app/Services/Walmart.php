@@ -1,8 +1,12 @@
 <?php
 namespace App\Services;
 
-use App\Services\Contractors\WalmartInterfase;
+use App\WalmartApiKey;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use App\Services\Contractors\WalmartInterfase;
+use function GuzzleHttp\Psr7\str;
+use Illuminate\Http\Response;
 
 class Walmart implements WalmartInterfase
 {
@@ -11,12 +15,18 @@ class Walmart implements WalmartInterfase
      */
     protected $client;
 
+    protected static $key;
+
+    protected static $count;
+
     /**
      * Walmart constructor.
      */
     public function __construct()
     {
         $this->client = new Client(['base_uri' => env('WALMART_BASE_URL')]);
+        self::$key = is_null(WalmartApiKey::get()->first()) ? "" : WalmartApiKey::get()->first()->key;
+        self::$count = WalmartApiKey::get()->count();
     }
 
     /**
@@ -37,7 +47,7 @@ class Walmart implements WalmartInterfase
         $url = "/v1/items";
 
         $query = [
-            'apiKey' => env('WALMART_API_KEY'),
+            'apiKey' => self::$key,
             'format' => $format
         ];
 
@@ -57,9 +67,27 @@ class Walmart implements WalmartInterfase
             $query['lsPublisherId'] = $lsPublisherId;
         }
 
-        return $this->client->request("GET", $url, [
+        $params = [
             'query' => $query
-        ]);
+        ];
+
+        return $this->error_hendler($url, $params, "GET");
+
+        try {
+            $result = $this->client->request("GET", $url, [
+                'query' => $query
+            ]);
+        } catch (ClientException $e) {
+            $query = [
+                'apiKey' => WalmartApiKey::get()->first()->key
+            ];
+            $result = $this->client->request("GET", $url, [
+                'query' => $query
+            ]);
+        }
+
+        return $result;
+
     }
 
     /**
@@ -328,5 +356,21 @@ class Walmart implements WalmartInterfase
         return $this->client->request("GET", "/v1/feeds/items", [
             'query' => $query
         ]);
+    }
+
+    private function error_hendler($url, $params, $method = "GET")
+    {
+        try {
+            $result = $this->client->request($method, $url, $params);
+        } catch (ClientException $e) {
+            $id = WalmartApiKey::whereKey(self::$key)->first()->id;
+            if (!self::$count--) {
+                return $e->getResponse();
+            }
+            self::$key = WalmartApiKey::where('id', '>', $id)->first()->key;
+            $params['query']['apiKey'] = self::$key;
+            return $this->error_hendler($url, $params, $method);
+        }
+        return $result;
     }
 }

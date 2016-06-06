@@ -16,10 +16,11 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('itemID');
-//            $table->string('userID');
-//            $table->string('price');
+            $table->string('userID')->nullable();
+            $table->string('price')->nullable();
             $table->string('title');
-//            $table->string('stock');
+            $table->string('url')->nullable();
+            $table->string('stock')->nullable();
             $table->boolean('alert_desktop')->nullable();
             $table->boolean('alert_email')->nullable();
             $table->boolean('alert_sms')->nullable();

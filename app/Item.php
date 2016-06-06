@@ -30,6 +30,7 @@ class Item extends Model
         'itemID',
 //        'userID',
         'price',
+        'url',
         'title',
         'stock',
         'alert_desktop',
@@ -37,11 +38,18 @@ class Item extends Model
         'alert_sms',
     ];
 
+    public function setUrlAttribute($value)
+    {
+        if(isset(explode('=http://', urldecode($value))[1])){
+            $this->attributes['url'] = "http://" . explode('=http://', urldecode($value))[1];
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function prices()
     {
         return $this->hasMany(Price::class);

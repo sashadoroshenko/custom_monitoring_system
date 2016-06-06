@@ -35,7 +35,11 @@ class HomeController extends Controller
             $upc = request()->input('upc', null);
             $lsPublisherId = request()->input('lsPublisherId', null);
 
-            $response = json_decode($this->walmart->getItems($ids, $upc, $lsPublisherId)->getBody());
+            $response = $this->walmart->getItems($ids, $upc, $lsPublisherId);
+            if($response->getStatusCode() != 200){
+                return;
+            }
+            dd($response);
             return view('walmart.items', compact('response', 'ids', 'upc', 'lsPublisherId'));
         }
         return view('walmart.items');

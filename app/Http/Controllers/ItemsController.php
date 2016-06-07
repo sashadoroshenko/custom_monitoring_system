@@ -10,6 +10,7 @@ use App\Price;
 use App\Services\Contractors\NotificationsInterfase;
 use App\Services\Contractors\WalmartInterfase;
 use App\Stock;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Session;
 
@@ -19,7 +20,7 @@ class ItemsController extends Controller
      * @var WalmartInterfase
      */
     protected $walmart;
-    
+
     /**
      * @var NotificationsInterfase
      */
@@ -208,7 +209,7 @@ class ItemsController extends Controller
         foreach ($items as $item) {
 
             $response = $this->walmart->getItems($item->itemID);
-            if($response->getStatusCode() != 200){
+            if ($response->getStatusCode() != 200) {
                 return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
             }
             $response = json_decode($response->getBody());
@@ -251,7 +252,7 @@ class ItemsController extends Controller
     {
         $data = [];
         $response = $this->walmart->getItems(request()->input('id', null));
-        if($response->getStatusCode() != 200){
+        if ($response->getStatusCode() != 200) {
             return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
         }
         $items = json_decode($response->getBody(), true);
@@ -281,11 +282,11 @@ class ItemsController extends Controller
      */
     public function getHistories($id)
     {
-        if(request()->input('type') == 'stock') {
+        if (request()->input('type') == 'stock') {
             $stocks = Item::findOrFail($id)->stocks->sortByDesc('status');
             return view('items.stocks', compact('stocks'))->render();
         }
-        
+
         $prices = Item::findOrFail($id)->prices->sortByDesc('status');
         return view('items.prices', compact('prices'))->render();
     }
@@ -307,7 +308,7 @@ class ItemsController extends Controller
                 $ids = implode(',', collect($item)->pluck(['itemID'])->all());
 
                 $response = $this->walmart->getItems($ids);
-                if($response->getStatusCode() != 200){
+                if ($response->getStatusCode() != 200) {
                     return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
                 }
 
@@ -334,7 +335,7 @@ class ItemsController extends Controller
             foreach ($items as $key => $item) {
 
                 $response = $this->walmart->getItems($item->itemID);
-                if($response->getStatusCode() != 200){
+                if ($response->getStatusCode() != 200) {
                     return response()->json(['message' => $response->getReasonPhrase(), 'code' => $response->getStatusCode()]);
                 }
 
@@ -372,12 +373,19 @@ class ItemsController extends Controller
             $result[] = [
                 'status' => 404,
                 'id' => $item->id,
+                'desktopAlert' => false,
                 'itemID' => $item->itemID,
                 'oldValue' => 0,
-                'newValue' => $response['stock']
+                'newValue' => $response['stock'],
+                'lastUpdated' => $item->updated_at,
+                'updated' => false
             ];
-        }else{
+        } else {
             if ($response['stock'] != $item->stocks()->where('status', 1)->first()->stock) {
+
+                $item = Item::findOrFail($item->id);
+                $item->updated_at = Carbon::now();
+                $item->save();
 
                 $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
 
@@ -394,31 +402,7 @@ class ItemsController extends Controller
                     'stock' => $response['stock']
                 ]);
 
-                $alerts = Item::all();
-                foreach ($alerts as $alert){
-                    $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
-                    $title = $response['name'];
-                    if ($alert->alert_email) {
-                        if ($alert->itemID == $item->itemID) {
-                            $this->notifications->sendEmail($item->itemID, $response['stock'], $oldStock, $title, $url, 'stock');
-                        }
-                    }
-
-                    if ($alert->alert_sms){
-                        if ($alert->itemID == $item->itemID) {
-                            $message = "Item with ID {$item->itemID} change stock. Old stock {$oldStock} new stock {$response['stock']}. {$url}";
-                            $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
-                        }
-                    }
-                }
-
-                $result[] = [
-                    'status' => 404,
-                    'id' => $item->id,
-                    'itemID' => $item->itemID,
-                    'oldValue' => $oldStock,
-                    'newValue' => $response['stock']
-                ];
+                $result[] = $this->notifications($response, $item, $oldStock, 'stock', 'stock');
 
             } else {
                 $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
@@ -427,9 +411,12 @@ class ItemsController extends Controller
                     $result[] = [
                         'status' => 404,
                         'id' => $item->id,
+                        'desktopAlert' => false,
                         'itemID' => $item->itemID,
                         'oldValue' => $response['stock'],
-                        'newValue' => $response['stock']
+                        'newValue' => $response['stock'],
+                        'lastUpdated' => $item->updated_at,
+                        'updated' => false
                     ];
                 }
             }
@@ -459,12 +446,19 @@ class ItemsController extends Controller
             $result[] = [
                 'status' => 404,
                 'id' => $item->id,
+                'desktopAlert' => false,
                 'itemID' => $item->itemID,
                 'oldValue' => 0,
-                'newValue' => (float)$response['salePrice']
+                'newValue' => (float)$response['salePrice'],
+                'lastUpdated' => $item->updated_at,
+                'updated' => false
             ];
         } else {
             if ($response['salePrice'] != $item->prices()->where('status', 1)->first()->price) {
+
+                $item = Item::findOrFail($item->id);
+                $item->updated_at = Carbon::now();
+                $item->save();
 
                 $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
 
@@ -481,30 +475,8 @@ class ItemsController extends Controller
                     'price' => $response['salePrice']
                 ]);
 
-                $alerts = Item::all();
-                foreach ($alerts as $alert){
-                    $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
-                    $title = $response['name'];
-                    if ($alert->alert_email) {
-                        if ($alert->itemID == $item->itemID) {
-                            $this->notifications->sendEmail($item->itemID, $response['salePrice'], $oldPrice, $title, $url, 'price');
-                        }
-                    }
-                    if ($alert->alert_sms){
-                        if ($alert->itemID == $item->itemID) {
-                            $message = "Item with ID {$item->itemID} change price. Old price {$oldPrice} new price {$response['salePrice']}. {$url}";
-                            $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
-                        }
-                    }
-                }
+                $result[] = $this->notifications($response, $item, $oldPrice);
 
-                $result[] = [
-                    'status' => 404,
-                    'id' => $item->id,
-                    'itemID' => $item->itemID,
-                    'oldValue' => (float)$oldPrice,
-                    'newValue' => (float)$response['salePrice']
-                ];
             } else {
                 $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
 
@@ -512,14 +484,57 @@ class ItemsController extends Controller
                     $result[] = [
                         'status' => 404,
                         'id' => $item->id,
+                        'desktopAlert' => false,
                         'itemID' => $item->itemID,
                         'oldValue' => (float)$response['salePrice'],
-                        'newValue' => (float)$response['salePrice']
+                        'newValue' => (float)$response['salePrice'],
+                        'lastUpdated' => $item->updated_at,
+                        'updated' => false
                     ];
                 }
             }
         }
 
         return $result;
+    }
+
+    private function notifications($response, $item, $oldValue, $type = 'price', $search = 'salePrice')
+    {
+        $desktopAlert = false;
+        $alerts = Item::all();
+        foreach ($alerts as $alert) {
+            $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
+            $title = $response['name'];
+            if ($alert->alert_email) {
+                if ($alert->itemID == $item->itemID) {
+                    $this->notifications->sendEmail($item->itemID, $response[$search], $oldValue, $title, $url, $type);
+                }
+            }
+
+            if ($alert->alert_sms) {
+                if ($alert->itemID == $item->itemID) {
+                    $message = "Item with ID {$item->itemID} change {$type}. Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
+                    $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
+                }
+            }
+
+            if ($alert->alert_desktop) {
+                if ($alert->itemID == $item->itemID) {
+                    $desktopAlert = true;
+                }
+            }
+        }
+
+        return [
+            'status' => 404,
+            'id' => $item->id,
+            'desktopAlert' => $desktopAlert,
+            'itemID' => $item->itemID,
+            'oldValue' => $type == 'price' ? (float)$oldValue : $oldValue,
+            'newValue' => $type == 'price' ? (float)$response[$search] : $response[$search],
+            'lastUpdated' => $item->updated_at,
+            'updated' => true
+        ];
+
     }
 }

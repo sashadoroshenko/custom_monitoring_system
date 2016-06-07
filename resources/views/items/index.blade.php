@@ -66,7 +66,7 @@
                         </div>
 
                     </td>
-                    <td class="updated-at" data-updated-at="{{$item->updated_at}}"></td>
+                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->updated_at}}"></td>
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
@@ -128,7 +128,7 @@
                     var d = moment();
                     var a = moment($(this).attr('data-updated-at'));
                     var human = d.to(a);
-                    $(this).text(human)
+                    $(this).text(human);
                 });
 
                 //store latest updated date into loacal storage
@@ -137,6 +137,12 @@
                     $('#last-updated-date-time').html(localStorage.lastUpdatedTime)
                 }
 
+            }
+
+            function desktopAlerts($item) {
+                if($item.desktopAlert == true){
+                    document.getElementById("myAudio").play();
+                }
             }
 
 
@@ -185,8 +191,8 @@
                     data: { _token: "{{csrf_token()}}"},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        if (!$.isEmptyObject(data)) {
 //                        console.log(data);
+                        if (!$.isEmptyObject(data)) {
                             var stock = data.stock;
                             var price = data.price;
 
@@ -194,21 +200,38 @@
                                 stock.forEach(function (element, index, array) {
                                     if (!$.isEmptyObject(element)) {
                                         $('#example').find(".stock." + element[0].id).html(element[0].newValue);
+                                        if(element[0].updated == true) {
+                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
+                                        }
                                     }
+                                    desktopAlerts(element[0]);
                                 });
                             }else{
                                 $('#example').find(".stock." + stock[0].id).html(stock[0].newValue);
+                                if(stock[0].updated == true) {
+                                    $('#example').find(".updated-at." + stock[0].id).attr('data-updated-at', stock[0].lastUpdated.date);
+                                }
+
+                                desktopAlerts(stock[0]);
                             }
                             if(price.length > 1) {
                                 price.forEach(function (element, index, array) {
                                     if (!$.isEmptyObject(element)) {
                                         $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
+                                        if(element[0].updated == true) {
+                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
+                                        }
+                                        desktopAlerts(element[0]);
                                     }
                                 });
                             }else{
                                 $('#example').find(".price." + price[0].id).html('$' + price[0].newValue);
+                                if(price[0].updated == true) {
+                                    $('#example').find(".updated-at." + price[0].id).attr('data-updated-at', price[0].lastUpdated.date);
+                                }
+                                desktopAlerts(price[0]);
                             }
-                            document.getElementById("myAudio").play();
+
                             updateDates();
                         }
 //                        console.log(data);

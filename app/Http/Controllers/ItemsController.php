@@ -261,12 +261,14 @@ class ItemsController extends Controller
             foreach ($items['items'] as $item) {
                 if (isset($item['marketplace']) && $item['marketplace'] || isset($item['bestMarketplacePrice']) && !$item['bestMarketplacePrice']) {
                     $items['stock'] = "Not Available";
+                    $items['salePrice'] = 0;
                 }
                 $data[] = $item;
             }
         } else {
             if (isset($items['marketplace']) && $items['marketplace'] || isset($items['bestMarketplacePrice']) && !$items['bestMarketplacePrice']) {
                 $items['stock'] = "Not Available";
+                $items['salePrice'] = 0;
             }
             $data[] = $items;
         }
@@ -359,6 +361,7 @@ class ItemsController extends Controller
     private function getStock($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
+            $response['salePrice'] = 0;
             $response['stock'] = "Not Available";
         }
         $result = [];
@@ -435,6 +438,7 @@ class ItemsController extends Controller
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
             $response['salePrice'] = 0;
+            $response['stock'] = "Not Available";
         }
         $result = [];
         if ($item->prices()->where('status', 1)->get()->isEmpty()) {
@@ -508,20 +512,20 @@ class ItemsController extends Controller
             $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
             $title = $response['name'];
             if ($alert->alert_email) {
-                if ($alert->itemID == $item->itemID) {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
                     $this->notifications->sendEmail($item->itemID, $response[$search], $oldValue, $title, $url, $type);
                 }
             }
 
             if ($alert->alert_sms) {
-                if ($alert->itemID == $item->itemID) {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
                     $message = "Item with ID {$item->itemID} change {$type}. Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
                     $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
                 }
             }
 
             if ($alert->alert_desktop) {
-                if ($alert->itemID == $item->itemID) {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
                     $desktopAlert = true;
                 }
             }

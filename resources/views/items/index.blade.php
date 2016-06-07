@@ -192,45 +192,50 @@
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
 //                        console.log(data);
+//                        return;
                         if (!$.isEmptyObject(data)) {
                             var stock = data.stock;
                             var price = data.price;
 
-                            if(stock.length > 1) {
+                        if (!$.isEmptyObject(stock)) {
+                            if (stock.length > 1) {
                                 stock.forEach(function (element, index, array) {
                                     if (!$.isEmptyObject(element)) {
                                         $('#example').find(".stock." + element[0].id).html(element[0].newValue);
-                                        if(element[0].updated == true) {
-                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
-                                        }
-                                    }
-                                    desktopAlerts(element[0]);
-                                });
-                            }else{
-                                $('#example').find(".stock." + stock[0].id).html(stock[0].newValue);
-                                if(stock[0].updated == true) {
-                                    $('#example').find(".updated-at." + stock[0].id).attr('data-updated-at', stock[0].lastUpdated.date);
-                                }
-
-                                desktopAlerts(stock[0]);
-                            }
-                            if(price.length > 1) {
-                                price.forEach(function (element, index, array) {
-                                    if (!$.isEmptyObject(element)) {
-                                        $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
-                                        if(element[0].updated == true) {
+                                        if (element[0].updated == true) {
                                             $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
                                         }
                                         desktopAlerts(element[0]);
                                     }
                                 });
-                            }else{
+                            } else {
+                                $('#example').find(".stock." + stock[0].id).html(stock[0].newValue);
+                                if (stock[0].updated == true) {
+                                    $('#example').find(".updated-at." + stock[0].id).attr('data-updated-at', stock[0].lastUpdated.date);
+                                }
+
+                                desktopAlerts(stock[0]);
+                            }
+                        }
+                        if (!$.isEmptyObject(price)) {
+                            if (price.length > 1) {
+                                price.forEach(function (element, index, array) {
+                                    if (!$.isEmptyObject(element)) {
+                                        $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
+                                        if (element[0].updated == true) {
+                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
+                                        }
+                                        desktopAlerts(element[0]);
+                                    }
+                                });
+                            } else {
                                 $('#example').find(".price." + price[0].id).html('$' + price[0].newValue);
-                                if(price[0].updated == true) {
+                                if (price[0].updated == true) {
                                     $('#example').find(".updated-at." + price[0].id).attr('data-updated-at', price[0].lastUpdated.date);
                                 }
                                 desktopAlerts(price[0]);
                             }
+                        }
 
                             updateDates();
                         }

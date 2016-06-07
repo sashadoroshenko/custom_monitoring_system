@@ -106,11 +106,10 @@
                         },
                         dataType: "json",
                         success: function (data, textStatus, jqXHR) {
-                            console.log(data);
-                            console.log(1);
+//                            console.log(data);
                             if(data.length != 0) {
                                 data.forEach(function (value, index, array) {
-                                    console.log(value)
+//                                    console.log(value)
                                     $('.title').val(value.name);
                                     $('.url').val(value.productUrl);
                                     $('.stock').val(value.stock);

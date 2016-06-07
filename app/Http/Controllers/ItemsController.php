@@ -404,22 +404,23 @@ class ItemsController extends Controller
 
                 $result[] = $this->notifications($response, $item, $oldStock, 'stock', 'stock');
 
-            } else {
-                $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
-
-                foreach ($stocks as $stock) {
-                    $result[] = [
-                        'status' => 404,
-                        'id' => $item->id,
-                        'desktopAlert' => false,
-                        'itemID' => $item->itemID,
-                        'oldValue' => $response['stock'],
-                        'newValue' => $response['stock'],
-                        'lastUpdated' => $item->updated_at,
-                        'updated' => false
-                    ];
-                }
-            }
+            } 
+//            else {
+//                $stocks = Stock::where('item_id', $item->id)->whereStatus(1)->get();
+//
+//                foreach ($stocks as $stock) {
+//                    $result[] = [
+//                        'status' => 404,
+//                        'id' => $item->id,
+//                        'desktopAlert' => false,
+//                        'itemID' => $item->itemID,
+//                        'oldValue' => $response['stock'],
+//                        'newValue' => $response['stock'],
+//                        'lastUpdated' => $item->updated_at,
+//                        'updated' => false
+//                    ];
+//                }
+//            }
         }
 
         return $result;
@@ -477,22 +478,23 @@ class ItemsController extends Controller
 
                 $result[] = $this->notifications($response, $item, $oldPrice);
 
-            } else {
-                $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
-
-                foreach ($prices as $price) {
-                    $result[] = [
-                        'status' => 404,
-                        'id' => $item->id,
-                        'desktopAlert' => false,
-                        'itemID' => $item->itemID,
-                        'oldValue' => (float)$response['salePrice'],
-                        'newValue' => (float)$response['salePrice'],
-                        'lastUpdated' => $item->updated_at,
-                        'updated' => false
-                    ];
-                }
             }
+//            else {
+//                $prices = Price::where('item_id', $item->id)->whereStatus(1)->get();
+//
+//                foreach ($prices as $price) {
+//                    $result[] = [
+//                        'status' => 404,
+//                        'id' => $item->id,
+//                        'desktopAlert' => false,
+//                        'itemID' => $item->itemID,
+//                        'oldValue' => (float)$response['salePrice'],
+//                        'newValue' => (float)$response['salePrice'],
+//                        'lastUpdated' => $item->updated_at,
+//                        'updated' => false
+//                    ];
+//                }
+//            }
         }
 
         return $result;

@@ -66,7 +66,8 @@
                         </div>
 
                     </td>
-                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->updated_at}}"></td>
+                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}"></td>
+                    {{--                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? "-" : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>--}}
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
@@ -125,10 +126,14 @@
             function updateDates() {
                 var updated = $('.updated-at');
                 updated.each(function () {
-                    var d = moment();
-                    var a = moment($(this).attr('data-updated-at'));
-                    var human = d.to(a);
-                    $(this).text(human);
+                    if($(this).attr('data-updated-at') != 0) {
+                        var d = moment();
+                        var a = moment($(this).attr('data-updated-at'));
+                        var human = d.to(a);
+                        $(this).text(human);
+                    }else{
+                        $(this).text("-");
+                    }
                 });
 
                 //store latest updated date into loacal storage

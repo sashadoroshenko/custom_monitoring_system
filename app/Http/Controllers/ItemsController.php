@@ -285,11 +285,11 @@ class ItemsController extends Controller
     public function getHistories($id)
     {
         if (request()->input('type') == 'stock') {
-            $stocks = Item::findOrFail($id)->stocks->sortByDesc('status');
+            $stocks = Item::findOrFail($id)->stocks->sortByDesc('status')->sortByDesc('created_at');
             return view('items.stocks', compact('stocks'))->render();
         }
 
-        $prices = Item::findOrFail($id)->prices->sortByDesc('status');
+        $prices = Item::findOrFail($id)->prices->sortByDesc('status')->sortByDesc('created_at');
         return view('items.prices', compact('prices'))->render();
     }
 
@@ -512,20 +512,20 @@ class ItemsController extends Controller
             $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
             $title = $response['name'];
             if ($alert->alert_email) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
                     $this->notifications->sendEmail($item->itemID, $response[$search], $oldValue, $title, $url, $type);
                 }
             }
 
             if ($alert->alert_sms) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
                     $message = "Item with ID {$item->itemID} change {$type}. Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
                     $this->notifications->sendSMS(env('TWILIO_NUMBER_TO'), $message);
                 }
             }
 
             if ($alert->alert_desktop) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available") {
+                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
                     $desktopAlert = true;
                 }
             }

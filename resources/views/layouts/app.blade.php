@@ -48,28 +48,29 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
+{{--                    <li class="@if(request()->is('/')) active @endif"><a href="{{ url('/') }}">Home</a></li>--}}
                     @if (!Auth::guest())
-                        <li><a href="{{ url('/items') }}">Items</a></li>
-                        <li><a href="{{ url('/walmart-api-keys') }}">Walmart API Keys</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Walmart functionality <span class="caret"></span>
-                            </a>
+                        <li class="@if(request()->is('items')) active @endif"><a href="{{ url('/items') }}">Items</a></li>
+                        <li class="@if(request()->is('walmart-api-keys')) active @endif"><a href="{{ url('/walmart-api-keys') }}">Walmart API Keys</a></li>
+                        <li class="@if(request()->is('logs')) active @endif"><a href="{{ url('/logs') }}">Logs</a></li>
+                        {{--<li class="dropdown">--}}
+                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">--}}
+                                {{--Walmart functionality <span class="caret"></span>--}}
+                            {{--</a>--}}
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/home/search') }}">Search</a></li>
-                                <li><a href="{{ url('/home/item') }}">Item</a></li>
-                                <li><a href="{{ url('/home/reviews') }}">Reviews</a></li>
-                                <li><a href="{{ url('/home/taxonomy') }}">Taxonomy</a></li>
-                                <li><a href="{{ url('/home/vod') }}">VOD</a></li>
-                                <li><a href="{{ url('/home/stores') }}">Stores</a></li>
-                                <li><a href="{{ url('/home/trends') }}">Trends</a></li>
-                                <li><a href="{{ url('/home/paginate') }}">Paginate</a></li>
-                                <li><a href="{{ url('/home/recommendation') }}">Recommendation</a></li>
-                                <li><a href="{{ url('/home/postBrowsed') }}">Post Browsed</a></li>
-                            </ul>
-                        </li>
+                            {{--<ul class="dropdown-menu" role="menu">--}}
+                                {{--<li><a href="{{ url('/home/search') }}">Search</a></li>--}}
+                                {{--<li><a href="{{ url('/home/item') }}">Item</a></li>--}}
+                                {{--<li><a href="{{ url('/home/reviews') }}">Reviews</a></li>--}}
+                                {{--<li><a href="{{ url('/home/taxonomy') }}">Taxonomy</a></li>--}}
+                                {{--<li><a href="{{ url('/home/vod') }}">VOD</a></li>--}}
+                                {{--<li><a href="{{ url('/home/stores') }}">Stores</a></li>--}}
+                                {{--<li><a href="{{ url('/home/trends') }}">Trends</a></li>--}}
+                                {{--<li><a href="{{ url('/home/paginate') }}">Paginate</a></li>--}}
+                                {{--<li><a href="{{ url('/home/recommendation') }}">Recommendation</a></li>--}}
+                                {{--<li><a href="{{ url('/home/postBrowsed') }}">Post Browsed</a></li>--}}
+                            {{--</ul>--}}
+                        {{--</li>--}}
 
                         {{--<li><a href="{{ url('/home/dataFeed') }}">Data Feed</a></li>--}}
                     @endif

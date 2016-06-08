@@ -18,7 +18,7 @@
                 <td>{{ $stock->status ? "Active" : "Inactive" }}</td>
                 <td>{{ $stock->stock }}</td>
                 <td>{{ $stock->created_at }}</td>
-                <td>{{ $stock->created_at == $stock->updated_at ? '-' : $stock->updated_at }}</td>
+                <td>{{ $stock->created_at == $stock->updated_at && $stock->status ? '-' : $stock->updated_at }}</td>
             </tr>
         @endforeach
     @else

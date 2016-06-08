@@ -16,35 +16,35 @@ Route::post('register', 'Auth\AuthController@postRegister');
 
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::group(['prefix' => 'home'], function () {
+//    Route::group(['prefix' => 'home'], function () {
+//
+//        Route::get('/', function () {
+//            return redirect('items');
+//        });
 
-        Route::get('/', function () {
-            return redirect('items');
-        });
+//        Route::any('item', 'HomeController@items');
+//
+//        Route::any('reviews', 'HomeController@reviews');
+//
+//        Route::any('search', 'HomeController@search');
+//
+//        Route::get('vod', 'HomeController@getVod');
+//
+//        Route::any('stores', 'HomeController@stores');
+//
+//        Route::get('taxonomy', 'HomeController@taxonomy');
+//
+//        Route::get('trends', 'HomeController@trendings');
+//
+//        Route::get('paginate', 'HomeController@getPaginate');
+//
+//        Route::any('recommendation', 'HomeController@recommendation');
+//
+//        Route::any('postBrowsed', 'HomeController@postBrowsed');
+//
+//        Route::any('dataFeed', 'HomeController@dataFeed');
 
-        Route::any('item', 'HomeController@items');
-
-        Route::any('reviews', 'HomeController@reviews');
-
-        Route::any('search', 'HomeController@search');
-
-        Route::get('vod', 'HomeController@getVod');
-
-        Route::any('stores', 'HomeController@stores');
-
-        Route::get('taxonomy', 'HomeController@taxonomy');
-
-        Route::get('trends', 'HomeController@trendings');
-
-        Route::get('paginate', 'HomeController@getPaginate');
-
-        Route::any('recommendation', 'HomeController@recommendation');
-
-        Route::any('postBrowsed', 'HomeController@postBrowsed');
-
-        Route::any('dataFeed', 'HomeController@dataFeed');
-
-    });
+//    });
 
     Route::post('items/showDesktopAlerts', 'ItemsController@showDesktopAlerts');
     Route::post('items/updateContent', 'ItemsController@updateContent');
@@ -65,7 +65,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('walmart-api-keys', 'WalmartApiKeysController');
     
-
+    Route::get('logs', 'LogViewerController@index');
+    
 });
 
 Route::get('test', function (){

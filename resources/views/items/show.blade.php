@@ -32,7 +32,15 @@
             </tr>
             <tr>
                 <th> Stock </th>
-                <td> {{ $item->stock }} </td>
+                <td>
+                    <ol>
+                        @foreach($item->stocks()->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get() as $stock)
+                            <li>
+                                <span class="label @if($stock->status) label-primary @else label-warning @endif">{{$stock->stock}}</span>
+                            </li>
+                        @endforeach
+                    </ol>
+                </td>
             </tr>
             </tbody>
             <tfoot>

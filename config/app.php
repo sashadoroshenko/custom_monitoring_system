@@ -152,6 +152,8 @@ return [
         
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
+        Torann\GeoIP\GeoIPServiceProvider::class,
+
     ],
 
     /*
@@ -203,6 +205,8 @@ return [
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
 
     ],
 

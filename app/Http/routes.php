@@ -71,6 +71,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('test', function (){
 
+    $item = \App\Item::get()->first();
+    dd(\GeoIP::getLocation());
+
     $test = urldecode("http://c.affil.walmart.com/t/api01?l=http%3A%2F%2Fwww.walmart.com%2Fip%2FOzark-Trail-30-Ounce-Double-Wall-Vacuum-Sealed-Tumbler%2F49772708%3Faffp1%3DgpaSHUa_7RD1lrZUr7vIj0Mt6eORRwuSa3Y5aFkVuwQ%26affilsrc%3Dapi%26veh%3Daff%26wmlspartner%3Dreadonlyapi");
     $test = str_split("http://" . explode('=http://', $test)[1], 159);
     dd($test);

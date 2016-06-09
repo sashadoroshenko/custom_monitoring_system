@@ -16,6 +16,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "rap2hpoutre/laravel-log-viewer": "^0.6.1",
         "torann/geoip": "^0.2.2"
+
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

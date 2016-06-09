@@ -151,7 +151,6 @@ return [
         Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
         
         Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
-
         Torann\GeoIP\GeoIPServiceProvider::class,
 
     ],

@@ -7,6 +7,7 @@
     "hash": "b56ba6d998bc40d5d8c99c2ede0d8e6f",
     "content-hash": "e28004e0572f69418e8ac9a9004d6645",
     "packages": [
+
         {
             "name": "aloha/twilio",
             "version": "2.1.1",

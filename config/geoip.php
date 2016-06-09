@@ -29,7 +29,7 @@ return array(
 		'database_path' => storage_path('app/geoip.mmdb'),
 		'update_url'    => 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
 	),
-
+ 
 	/*
 	|--------------------------------------------------------------------------
 	| Default Location

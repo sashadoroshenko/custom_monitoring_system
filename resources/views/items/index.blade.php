@@ -66,8 +66,16 @@
                         </div>
 
                     </td>
-                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at->timezone($location) : $item->prices()->where('status', 1)->first()->updated_at->timezone($location)) }}"></td>
-{{--                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? $item->prices()->where('status', 1)->first()->updated_at->timezone($location) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>--}}
+                    <td class="updated-at {{ $item->id }} text-center" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : showCurrentDateTime($item->prices()->where('status', 1)->first()->updated_at)) }}"></td>
+                    {{--<td>--}}
+                        {{--@if($item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at)--}}
+                            {{--{{ showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) }}--}}
+                        {{--@elseif($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at)--}}
+                            {{--{{ $item->stocks()->where('status', 1)->first()->updated_at }}--}}
+                        {{--@else--}}
+                            {{--{{ $item->prices()->where('status', 1)->first()->updated_at }}--}}
+                        {{--@endif--}}
+                    {{--</td>--}}
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>

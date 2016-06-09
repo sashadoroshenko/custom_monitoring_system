@@ -45,8 +45,12 @@ class ItemsController extends Controller
     public function index()
     {
         $items = Item::all();
+        $location = "UTC";
+        if(auth()->user()->location){
+            $location = auth()->user()->location;
+        }
 
-        return view('items.index', compact('items'));
+        return view('items.index', compact('items', 'location'));
     }
 
     /**

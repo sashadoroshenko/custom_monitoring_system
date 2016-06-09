@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.1.35 (LTS) on 2016-06-09.
+ * Generated for Laravel 5.1.37 (LTS) on 2016-06-09.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -10,7 +10,7 @@
 namespace {
     exit("This file should not be included, only analyzed by your IDE");
 
-    class App extends \Illuminate\Support\Facades\App{ 
+    class App extends \Illuminate\Support\Facades\App{
         
         /**
          * Get the version number of the application.

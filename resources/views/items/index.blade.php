@@ -66,8 +66,8 @@
                         </div>
 
                     </td>
-                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}"></td>
-                    {{--                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? "-" : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>--}}
+{{--                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at->timezone(auth()->user()->location) : $item->prices()->where('status', 1)->first()->updated_at->timezone(auth()->user()->location)) }}"></td>--}}
+                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? $item->prices()->where('status', 1)->first()->updated_at->timezone($location) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>

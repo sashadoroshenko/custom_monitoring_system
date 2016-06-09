@@ -27,10 +27,10 @@ class LogViewerController extends Controller
 
         $logs = LaravelLogViewer::all();
 
-        return view('log', [
-            'logs' => $logs,
-            'files' => LaravelLogViewer::getFiles(true),
-            'current_file' => LaravelLogViewer::getFileName()
-        ]);
+        $files = LaravelLogViewer::getFiles(true);
+
+        $current_file = LaravelLogViewer::getFileName();
+
+        return view('log', compact('logs','files', 'current_file'));
     }
 }

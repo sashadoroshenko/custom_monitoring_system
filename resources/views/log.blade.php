@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <h1><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Laravel Log Viewer</h1>
-            <p class="text-muted"><i>by Rap2h</i></p>
+            {{--<p class="text-muted"><i>by Rap2h</i></p>--}}
             <div class="list-group">
                 @foreach($files as $file)
                     <a href="?l={{ base64_encode($file) }}" class="list-group-item @if ($current_file == $file) llv-active @endif">

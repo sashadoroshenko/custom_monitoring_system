@@ -66,8 +66,8 @@
                         </div>
 
                     </td>
-{{--                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at->timezone(auth()->user()->location) : $item->prices()->where('status', 1)->first()->updated_at->timezone(auth()->user()->location)) }}"></td>--}}
-                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? $item->prices()->where('status', 1)->first()->updated_at->timezone($location) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>
+                    <td class="updated-at {{ $item->id }}" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at->timezone($location) : $item->prices()->where('status', 1)->first()->updated_at->timezone($location)) }}"></td>
+{{--                    <td>{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? $item->prices()->where('status', 1)->first()->updated_at->timezone($location) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? $item->stocks()->where('status', 1)->first()->updated_at : $item->prices()->where('status', 1)->first()->updated_at) }}</td>--}}
                     <td>
                         <a href="{{ url('/items/' . $item->id) }}" class="btn btn-success btn-xs" title="View Item">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"/>
@@ -110,13 +110,8 @@
                 "pageLength": 50
             });
             //initialize functions for first start
-//            timedRefresh(1000);
             refreshContent(5000);
             updateDates();
-
-            function timedRefresh(alertTimeout) {
-                setTimeout(showAlert, alertTimeout);
-            }
 
             function refreshContent(updateTimeout) {
                 setTimeout(updateContent, updateTimeout);
@@ -148,44 +143,6 @@
                 if($item.desktopAlert == true){
                     document.getElementById("myAudio").play();
                 }
-            }
-
-
-            function showAlert() {
-                $.ajax({
-                    url: "{{url('items/showDesktopAlerts')}}",
-                    type: "POST",
-                    data: { _token: "{{csrf_token()}}"},
-                    dataType: "json",
-                    success: function (data, textStatus, jqXHR) {
-                        if(data.length > 0) {
-                            var message = '';
-                            data.forEach(function (element, index, array) {
-
-                                if (element.status === 200) {
-                                    message += "Product With ID " + element.itemID + "don't Change price. New Prise - <strong>" + element.newValue + "</strong>, Old Price - <strong>" + element.oldValue + "</strong>";
-                                } else {
-                                    message += "Product With ID " + element.itemID + " Change price. New Prise - <strong>" + element.newValue + "</strong>, Old Price - <strong>" + element.oldValue + "</strong>";
-                                }
-                                message += "<br>";
-                            });
-
-                            swal({
-                                title: "<small class='text-danger'>Monitoring System Alerts <i class='glyphicon glyphicon-alert'></i></small>",
-                                text: message,
-                                html: true,
-                                timer: 10000
-                            });
-//                        console.log(data);
-                        }
-                        timedRefresh(60000);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                        timedRefresh(60000);
-                    }
-                });
-
             }
 
             //update content functionality

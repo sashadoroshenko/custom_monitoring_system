@@ -8,15 +8,21 @@ use App\Services\Contractors\WalmartInterfase;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Response;
 
-class Walmart implements WalmartInterfase
+class WalmartClass implements WalmartInterfase
 {
     /**
      * @var Client
      */
     protected $client;
 
+    /**
+     * @var string
+     */
     protected static $key;
 
+    /**
+     * @var integer
+     */
     protected static $count;
 
     /**
@@ -25,7 +31,7 @@ class Walmart implements WalmartInterfase
     public function __construct()
     {
         $this->client = new Client(['base_uri' => env('WALMART_BASE_URL')]);
-        self::$key = is_null(WalmartApiKey::get()->first()) ? "" : WalmartApiKey::get()->first()->key;
+        self::$key = is_null(WalmartApiKey::get()->first()) ? env('WALMART_API_KEY') : WalmartApiKey::get()->first()->key;
         self::$count = WalmartApiKey::get()->count();
     }
 
@@ -72,21 +78,21 @@ class Walmart implements WalmartInterfase
         ];
 
         return $this->error_hendler($url, $params, "GET");
-
-        try {
-            $result = $this->client->request("GET", $url, [
-                'query' => $query
-            ]);
-        } catch (ClientException $e) {
-            $query = [
-                'apiKey' => WalmartApiKey::get()->first()->key
-            ];
-            $result = $this->client->request("GET", $url, [
-                'query' => $query
-            ]);
-        }
-
-        return $result;
+//
+//        try {
+//            $result = $this->client->request("GET", $url, [
+//                'query' => $query
+//            ]);
+//        } catch (ClientException $e) {
+//            $query = [
+//                'apiKey' => WalmartApiKey::get()->first()->key
+//            ];
+//            $result = $this->client->request("GET", $url, [
+//                'query' => $query
+//            ]);
+//        }
+//
+//        return $result;
 
     }
 
@@ -358,6 +364,12 @@ class Walmart implements WalmartInterfase
         ]);
     }
 
+    /**
+     * @param $url
+     * @param $params
+     * @param string $method
+     * @return mixed|null|\Psr\Http\Message\ResponseInterface
+     */
     private function error_hendler($url, $params, $method = "GET")
     {
         try {

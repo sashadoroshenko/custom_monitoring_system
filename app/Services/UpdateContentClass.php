@@ -161,7 +161,7 @@ class UpdateContentClass implements UpdateContentInterface
                 'itemID' => $item->itemID,
                 'oldValue' => 0,
                 'newValue' => $response['stock'],
-                'lastUpdated' => $item->updated_at->timezone($this->location),
+                'lastUpdated' => showCurrentDateTime($item->updated_at),
                 'updated' => false
             ];
         } else {
@@ -236,7 +236,7 @@ class UpdateContentClass implements UpdateContentInterface
                 'itemID' => $item->itemID,
                 'oldValue' => 0,
                 'newValue' => (float)$response['salePrice'],
-                'lastUpdated' => $item->updated_at->timezone($this->location),
+                'lastUpdated' => showCurrentDateTime($item->updated_at),
                 'updated' => false
             ];
         } else {
@@ -327,7 +327,7 @@ class UpdateContentClass implements UpdateContentInterface
             'itemID' => $item->itemID,
             'oldValue' => $type == 'price' ? (float)$oldValue : $oldValue,
             'newValue' => $type == 'price' ? (float)$response[$search] : $response[$search],
-            'lastUpdated' => $item->updated_at->timezone($this->location),
+            'lastUpdated' => showCurrentDateTime($item->updated_at),
             'updated' => true
         ];
     }

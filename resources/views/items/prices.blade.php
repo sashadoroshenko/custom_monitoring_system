@@ -17,8 +17,8 @@
                 <td>{{ $x }}</td>
                 <td>{{ $price->status ? "Active" : "Inactive" }}</td>
                 <td>${{ $price->price }}</td>
-                <td>{{ $price->created_at }}</td>
-                <td>{{ $price->created_at == $price->updated_at && $price->status ? '-' : $price->updated_at }}</td>
+                <td>{{ showCurrentDateTime($price->created_at) }}</td>
+                <td>{{ $price->created_at == $price->updated_at && $price->status ? '-' : showCurrentDateTime($price->updated_at) }}</td>
             </tr>
         @endforeach
     @else

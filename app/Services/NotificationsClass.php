@@ -11,12 +11,13 @@ class NotificationsClass implements NotificationsInterfase
 
     /**
      * Send SMS functionality
-     * 
+     *
      * @param $number
+     * @param $title
      * @param $message
      * @return mixed
      */
-    public function sendSMS($number, $message)
+    public function sendSMS($number, $title, $message)
     {
         $twilio = new \Aloha\Twilio\Twilio(
             config('twilio.twilio.connections.twilio.sid'),
@@ -30,12 +31,20 @@ class NotificationsClass implements NotificationsInterfase
             return $e->getMessage();
         };
 
+        auth()->user()->notifications()->create([
+            'status' => 1,
+            'type' => 'phone',
+            'contact_details' => auth()->user()->phone ? auth()->user()->phone : env('TWILIO_NUMBER_TO'),
+            'title' => $title,
+            'content' => $message
+        ]);
+
         return $message;
     }
 
     /**
      * Send Email functionality
-     * 
+     *
      * @param $itemID
      * @param null $newValue
      * @param null $oldValue
@@ -50,15 +59,30 @@ class NotificationsClass implements NotificationsInterfase
             return;
         }
 
+        $content = '<strong>' . $itemID . '</strong> change ' . $type . '. Old ' . $type . ' ' . $oldValue . ' new ' . $type . ' ' . $newValue . '.';
+
         Mail::send('auth.emails.notification', [
-            'itemID' => $itemID,
-            'newValue' => $newValue,
-            'oldValue' => $oldValue,
             'title' => $title,
             'url' => $url,
-            'type' => $type
-        ], function ($m) use($title){
+            'content' => $content,
+        ], function ($m) use ($title) {
             $m->to(auth()->user()->email)->subject($title);
         });
+
+        auth()->user()->notifications()->create([
+            'status' => 1,
+            'type' => $type,
+            'contact_details' => auth()->user()->email,
+            'title' => $title,
+            'content' => $content
+        ]);
+
+        auth()->user()->notifications()->create([
+            'status' => 1,
+            'type' => 'email',
+            'contact_details' => auth()->user()->email,
+            'title' => $title,
+            'content' => $content
+        ]);
     }
 }

@@ -14,17 +14,7 @@
 <body>
 <div class="container-fluid">
     <h1><a href="{{$url}}">{{$title}}</a></h1>
-    @if($type == 'price')
-        <ul class="list-inline">
-            <li><strong>{{ $itemID }}</strong> change price. Old Price {{ $oldValue }} new price {{ $newValue }}</li>
-        </ul>
-    @endif
-    @if($type == 'stock')
-        <hr>
-        <ul class="list-inline">
-            <li><strong>{{ $itemID }}</strong> change stock. Old Stock {{ $oldValue }} new stock {{ $newValue }}</li>
-        </ul>
-    @endif
+    <ul class="list-inline"><li>{!! $content !!}</li></ul>
 </div>
 
 <!-- JavaScripts -->

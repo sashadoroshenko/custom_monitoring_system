@@ -8,10 +8,11 @@ interface NotificationsInterfase
 
     /**
      * @param $number
+     * @param $title
      * @param $message
      * @return mixed
      */
-    public function sendSMS($number, $message);
+    public function sendSMS($number, $title, $message);
 
     /**
      * @param $itemID

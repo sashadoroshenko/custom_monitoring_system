@@ -22,89 +22,71 @@
                 <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-envelope-o"></i>
-                        <span class="label label-success">4</span>
+                        <i class="fa fa-mobile"></i>
+                        <span class="label label-success notification-unread-phone-count">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 4 messages</li>
+                        <li class="header">You have <strong class="notification-unread-phone-count">0</strong> phone notifications</li>
                         <li>
                             <!-- inner menu: contains the messages -->
-                            <ul class="menu">
-                                <li><!-- start message -->
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <!-- User Image -->
-                                            <img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
-                                        </div>
-                                        <!-- Message title and timestamp -->
-                                        <h4>
-                                            Support Team
-                                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                        </h4>
-                                        <!-- The message -->
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li><!-- end message -->
+                            <ul class="menu notification-unread-phone-menu">
                             </ul><!-- /.menu -->
                         </li>
-                        <li class="footer"><a href="#">See All Messages</a></li>
+                        <li class="footer"><a href="{{url('notifications/phones')}}">View all</a></li>
+                    </ul>
+                </li><!-- /.messages-menu -->
+
+                <!-- Messages: style can be found in dropdown.less-->
+                <li class="dropdown messages-menu">
+                    <!-- Menu toggle button -->
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-envelope-o"></i>
+                        <span class="label label-success notification-unread-email-count">0</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">You have <strong class="notification-unread-email-count">0</strong> message notifications</li>
+                        <li>
+                            <!-- inner menu: contains the messages -->
+                            <ul class="menu notification-unread-email-menu">
+                            </ul><!-- /.menu -->
+                        </li>
+                        <li class="footer"><a href="{{url('notifications/emails')}}">View all</a></li>
                     </ul>
                 </li><!-- /.messages-menu -->
 
                 <!-- Notifications Menu -->
-                <li class="dropdown notifications-menu">
+                <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">10</span>
+                        <i class="fa fa-money"></i>
+                        <span class="label label-warning notification-unread-price-count">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 10 notifications</li>
+                        <li class="header">You have <strong class="notification-unread-price-count">0</strong> price notifications</li>
                         <li>
                             <!-- Inner Menu: contains the notifications -->
-                            <ul class="menu">
-                                <li><!-- start notification -->
-                                    <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                    </a>
-                                </li><!-- end notification -->
+                            <ul class="menu notification-unread-price-menu">
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">View all</a></li>
+                        <li class="footer"><a href="{{url('notifications/prices')}}">View all</a></li>
                     </ul>
                 </li>
                 <!-- Tasks Menu -->
-                <li class="dropdown tasks-menu">
+                <li class="dropdown messages-menu">
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-flag-o"></i>
-                        <span class="label label-danger">9</span>
+                        <i class="fa fa-stack-exchange"></i>
+                        <span class="label label-danger notification-unread-stock-count">0</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 9 tasks</li>
+                        <li class="header">You have <strong class="notification-unread-stock-count">0</strong> stock notifications</li>
                         <li>
                             <!-- Inner menu: contains the tasks -->
-                            <ul class="menu">
-                                <li><!-- Task item -->
-                                    <a href="#">
-                                        <!-- Task title and progress text -->
-                                        <h3>
-                                            Design some buttons
-                                            <small class="pull-right">20%</small>
-                                        </h3>
-                                        <!-- The progress bar -->
-                                        <div class="progress xs">
-                                            <!-- Change the css width attribute to simulate progress -->
-                                            <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                <span class="sr-only">20% Complete</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li><!-- end task item -->
+                            <ul class="menu notification-unread-stock-menu">
                             </ul>
                         </li>
                         <li class="footer">
-                            <a href="#">View all tasks</a>
+                            <a href="{{url('notifications/stocks')}}">View all</a>
                         </li>
                     </ul>
                 </li>
@@ -127,21 +109,21 @@
                                 <img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image" />
                                 <p>
                                     {{ Auth::user()->name }}
-                                    <small>Member since {{ Auth::user()->created_at }}</small>
+                                    <small>Member since {{ showCurrentDateTime(Auth::user()->created_at)->diffForHumans() }}</small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Followers</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Sales</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Friends</a>
-                                </div>
-                            </li>
+                            {{--<li class="user-body">--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Followers</a>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Sales</a>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-xs-4 text-center">--}}
+                                    {{--<a href="#">Friends</a>--}}
+                                {{--</div>--}}
+                            {{--</li>--}}
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Item;
+use App\Notification;
 use App\Stock;
 use App\Price;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class UpdateContentClass implements UpdateContentInterface
     /**
      * @var string
      */
-    protected $location;
+    protected $number;
 
     /**
      * UpdateContentClass constructor.
@@ -36,9 +37,9 @@ class UpdateContentClass implements UpdateContentInterface
     {
         $this->walmart = $walmartInterfase;
         $this->notification = $notificationsInterfase;
-        $this->location = "UTC";
-        if(auth()->user()->location){
-            $this->location = auth()->user()->location;
+        $this->number = env('TWILIO_NUMBER_TO');
+        if(auth()->user()->phone){
+            $this->number = auth()->user()->phone;
         }
     }
 
@@ -309,7 +310,7 @@ class UpdateContentClass implements UpdateContentInterface
             if ($alert->alert_sms) {
                 if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
                     $message = "Item with ID {$item->itemID} change {$type}. Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
-                    $this->notification->sendSMS(env('TWILIO_NUMBER_TO'), $message);
+                    $this->notification->sendSMS($this->number, $title, $message);
                 }
             }
 

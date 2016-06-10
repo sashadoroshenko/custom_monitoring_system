@@ -211,6 +211,7 @@
                         }
 //                        console.log(data);
                         refreshContent(60000);
+                        updateNotifications();
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log('error');

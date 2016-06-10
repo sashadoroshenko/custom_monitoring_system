@@ -34,6 +34,17 @@ class Notification extends Model
         'content'
     ];
 
+    /**
+     * Get the updated at.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return showCurrentDateTime($value)->toDateTimeString();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

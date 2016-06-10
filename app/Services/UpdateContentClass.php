@@ -262,7 +262,9 @@ class UpdateContentClass implements UpdateContentInterface
                     'price' => $response['salePrice']
                 ]);
 
-                $result[] = $this->notifications($response, $item, $oldPrice);
+                if($response['stock'] != "Not Available" && $response['stock'] != "Not available") {
+                    $result[] = $this->notifications($response, $item, $oldPrice);
+                }
 
             }
 //            else {
@@ -302,20 +304,20 @@ class UpdateContentClass implements UpdateContentInterface
             $url = "http://" . explode('=http://', urldecode($response['productUrl']))[1];
             $title = $response['name'];
             if ($alert->alert_email) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
+                if ($alert->itemID == $item->itemID) {
                     $this->notification->sendEmail($item->itemID, $response[$search], $oldValue, $title, $url, $type);
                 }
             }
 
             if ($alert->alert_sms) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
+                if ($alert->itemID == $item->itemID) {
                     $message = "Item with ID {$item->itemID} change {$type}. Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
                     $this->notification->sendSMS($this->number, $title, $message);
                 }
             }
 
             if ($alert->alert_desktop) {
-                if ($alert->itemID == $item->itemID && $response['stock'] != "Not Available" && $response['stock'] != "Not available") {
+                if ($alert->itemID == $item->itemID) {
                     $desktopAlert = true;
                 }
             }

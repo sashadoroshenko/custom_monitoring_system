@@ -104,7 +104,7 @@
                             '<span class="notification-unread-' + type + '-title">' + element.title + '</span>' +
                             '<small>' +
                             '<i class="fa fa-clock-o"></i>' +
-                            '<span class="notification-unread-' + type + '-created">' + element.created_at + '</span>' +
+                            '<span class="notification-unread-' + type + '-created created-at" data-created-at="' + element.created_at + '">' + element.created_at + '</span>' +
                             '</small>' +
                             '</h4>' +
                             '<p class="notification-unread-' + type + '-content" >' + element.content.substr(0, 50) + '...</p>' +
@@ -115,8 +115,25 @@
         }else{
             $('.notification-unread-' + type + '-menu').children().remove();
         }
+
+//        updateDates1()
     }
 
+    //update date to human using moment js
+    function updateDates1() {
+        var updated = $('.created-at');
+        console.log(updated)
+        updated.each(function () {
+            if($(this).attr('data-updated-at') != 0) {
+                var d = moment();
+                var a = moment($(this).attr('data-updated-at'));
+                var human = d.to(a);
+                $(this).text(human);
+            }else{
+                $(this).text("-");
+            }
+        });
+    }
 </script>
 </body>
 </html>

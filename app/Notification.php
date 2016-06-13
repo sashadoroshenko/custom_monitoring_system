@@ -45,6 +45,11 @@ class Notification extends Model
         return showCurrentDateTime($value)->toDateTimeString();
     }
 
+    /**
+     * Get the user that owns the notification.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

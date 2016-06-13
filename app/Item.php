@@ -38,6 +38,12 @@ class Item extends Model
         'alert_sms',
     ];
 
+    /**
+     * Set the url's.
+     *
+     * @param  string  $value
+     * @return string
+     */
     public function setUrlAttribute($value)
     {
         if(isset(explode('=http://', urldecode($value))[1])){
@@ -45,16 +51,31 @@ class Item extends Model
         }
     }
 
+    /**
+     * Get the user that owns the item.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the prices for the item.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function prices()
     {
         return $this->hasMany(Price::class);
     }
 
+    /**
+     * Get the stocks for the item.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function stocks()
     {
         return $this->hasMany(Stock::class);

@@ -43,11 +43,28 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['last_logged_in'];
+
+    /**
+     * Get the items for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function items()
     {
         return $this->hasMany(Item::class);
     }
 
+    /**
+     * Get the notifications for the user.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function notifications()
     {
         return $this->hasMany(Notification::class);

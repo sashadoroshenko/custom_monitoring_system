@@ -31,6 +31,11 @@ class Stock extends Model
         'stock'
     ];
 
+    /**
+     * Get the item that owns the stock.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function item()
     {
         return $this->belongsTo(Item::class);

@@ -32,6 +32,9 @@ class Alert extends Model
         'info'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function item()
     {
         return $this->belongsTo(Item::class);

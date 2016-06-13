@@ -31,6 +31,11 @@ class Price extends Model
         'price'
     ];
 
+    /**
+     * Get the item that owns the price.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function item()
     {
         return $this->belongsTo(Item::class);

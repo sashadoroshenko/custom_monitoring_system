@@ -75,6 +75,7 @@
                     content(price, 'price' );
                     content(stock, 'stock' );
                     content(phone, 'phone' );
+                    humanDate();
                 }
                 refreshContent(60000);
             },
@@ -116,22 +117,17 @@
             $('.notification-unread-' + type + '-menu').children().remove();
         }
 
-//        updateDates1()
+
     }
 
     //update date to human using moment js
-    function updateDates1() {
+    function humanDate() {
         var updated = $('.created-at');
-        console.log(updated)
         updated.each(function () {
-            if($(this).attr('data-updated-at') != 0) {
-                var d = moment();
-                var a = moment($(this).attr('data-updated-at'));
-                var human = d.to(a);
-                $(this).text(human);
-            }else{
-                $(this).text("-");
-            }
+            var d = moment();
+            var a = moment($(this).attr('data-created-at'));
+            var human = d.to(a);
+            $(this).text(human);
         });
     }
 </script>

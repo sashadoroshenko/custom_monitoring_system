@@ -63,7 +63,7 @@
                                 <span class="glyphicon glyphicon-{{$log['level_img']}}-sign" aria-hidden="true"></span>
                                 &nbsp;{{$log['level']}}
                             </td>
-                            <td class="date">{{ showCurrentDateTime($log['date']) }}</td>
+                            <td class="date created-at" data-created-at="{{ showCurrentDateTime($log['date']) }}">{{ showCurrentDateTime($log['date']) }}</td>
                             <td class="text">
                                 @if ($log['stack'])
                                     <a class="pull-right expand btn btn-default btn-xs" data-display="stack{{$key}}">

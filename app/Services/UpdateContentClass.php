@@ -2,25 +2,25 @@
 
 namespace App\Services;
 
-use App\Item;
-use App\Services\Contractors\WalmartInterfase;
+use App\Models\Item;
+use App\Services\Contractors\WalmartInterface;
 use App\Services\Contractors\UpdateContentInterface;
 use Carbon\Carbon;
 
 class UpdateContentClass implements UpdateContentInterface
 {
     /**
-     * @var WalmartInterfase
+     * @var WalmartInterface
      */
     protected $walmart;
 
     /**
      * UpdateContentClass constructor.
-     * @param WalmartInterfase $walmartInterfase
+     * @param WalmartInterface $walmartInterface
      */
-    public function __construct(WalmartInterfase $walmartInterfase)
+    public function __construct(WalmartInterface $walmartInterface)
     {
-        $this->walmart = $walmartInterfase;
+        $this->walmart = $walmartInterface;
     }
 
     /**

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Session;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {
@@ -15,7 +14,7 @@ class ProfileController extends Controller
      *
      * @param  int  $id
      *
-     * @return void
+     * @return mixed
      */
     public function show()
     {

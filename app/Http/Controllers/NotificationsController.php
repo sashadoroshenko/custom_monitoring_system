@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Notification;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\Notification;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class NotificationsController extends Controller

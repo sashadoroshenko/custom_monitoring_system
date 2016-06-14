@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Item;
+use App\Models\Notification;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -42,13 +44,6 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['last_logged_in'];
 
     /**
      * Get the items for the user.

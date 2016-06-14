@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use File;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Rap2hpoutre\LaravelLogViewer\LaravelLogViewer;
 

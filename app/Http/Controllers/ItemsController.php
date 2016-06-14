@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 
 use Session;
-use App\Item;
-use App\Price;
-use App\Stock;
 use Carbon\Carbon;
+use App\Models\Item;
+use App\Models\Price;
+use App\Models\Stock;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Services\HistoryClass;

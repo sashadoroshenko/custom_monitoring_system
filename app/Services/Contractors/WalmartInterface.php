@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\Contractors;
 
-interface WalmartInterfase
+interface WalmartInterface
 {
 
     /**

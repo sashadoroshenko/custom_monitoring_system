@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
-use App\WalmartApiKey;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Session;
+use Carbon\Carbon;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Models\WalmartApiKey;
+use App\Http\Controllers\Controller;
 
 class WalmartApiKeysController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return void
+     * @return mixed
      */
     public function index()
     {
@@ -27,7 +26,7 @@ class WalmartApiKeysController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return void
+     * @return mixed
      */
     public function create()
     {
@@ -37,7 +36,7 @@ class WalmartApiKeysController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return void
+     * @return mixed
      */
     public function store(Request $request)
     {
@@ -55,7 +54,7 @@ class WalmartApiKeysController extends Controller
      *
      * @param  int  $id
      *
-     * @return void
+     * @return mixed
      */
     public function show($id)
     {
@@ -69,7 +68,7 @@ class WalmartApiKeysController extends Controller
      *
      * @param  int  $id
      *
-     * @return void
+     * @return mixed
      */
     public function edit($id)
     {
@@ -83,7 +82,7 @@ class WalmartApiKeysController extends Controller
      *
      * @param  int  $id
      *
-     * @return void
+     * @return mixed
      */
     public function update($id, Request $request)
     {
@@ -102,7 +101,7 @@ class WalmartApiKeysController extends Controller
      *
      * @param  int  $id
      *
-     * @return void
+     * @return mixed
      */
     public function destroy($id)
     {

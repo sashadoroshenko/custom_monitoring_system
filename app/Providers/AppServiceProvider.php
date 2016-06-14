@@ -8,7 +8,7 @@ use App\Services\NotificationsClass;
 use App\Services\UpdateContentClass;
 use Illuminate\Support\ServiceProvider;
 use App\Services\CronJobUpdateDataClass;
-use App\Services\Contractors\WalmartInterfase;
+use App\Services\Contractors\WalmartInterface;
 use App\Services\Contractors\HistoryInterface;
 use App\Services\Contractors\UpdateContentInterface;
 use App\Services\Contractors\NotificationsInterface;
@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
         }
         // Register repositories bindings here
         $this->app->bind(HistoryInterface::class, HistoryClass::class);
-        $this->app->bind(WalmartInterfase::class, WalmartClass::class);
+        $this->app->bind(WalmartInterface::class, WalmartClass::class);
         $this->app->bind(UpdateContentInterface::class, UpdateContentClass::class);
         $this->app->bind(NotificationsInterface::class, NotificationsClass::class);
         $this->app->bind(CronJobUpdateDataInterface::class, CronJobUpdateDataClass::class);

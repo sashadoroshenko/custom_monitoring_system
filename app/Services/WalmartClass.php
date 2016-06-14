@@ -1,14 +1,14 @@
 <?php
 namespace App\Services;
 
-use App\WalmartApiKey;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use App\Services\Contractors\WalmartInterfase;
-use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Response;
+use App\Models\WalmartApiKey;
+use function GuzzleHttp\Psr7\str;
+use GuzzleHttp\Exception\ClientException;
+use App\Services\Contractors\WalmartInterface;
 
-class WalmartClass implements WalmartInterfase
+class WalmartClass implements WalmartInterface
 {
     /**
      * @var Client
@@ -78,21 +78,6 @@ class WalmartClass implements WalmartInterfase
         ];
 
         return $this->error_hendler($url, $params, "GET");
-//
-//        try {
-//            $result = $this->client->request("GET", $url, [
-//                'query' => $query
-//            ]);
-//        } catch (ClientException $e) {
-//            $query = [
-//                'apiKey' => WalmartApiKey::get()->first()->key
-//            ];
-//            $result = $this->client->request("GET", $url, [
-//                'query' => $query
-//            ]);
-//        }
-//
-//        return $result;
 
     }
 

@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-
-use App\Item;
+use App\Models\Item;
 use App\Services\Contractors\HistoryInterface;
 
 class HistoryClass implements HistoryInterface

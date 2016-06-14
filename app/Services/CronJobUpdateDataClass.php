@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\Item;
-use App\Stock;
-use App\Price;
+use App\Models\Item;
+use App\Models\Stock;
+use App\Models\Price;
 use App\User;
-use App\Services\Contractors\WalmartInterfase;
+use App\Services\Contractors\WalmartInterface;
 use App\Services\Contractors\NotificationsInterface;
 use App\Services\Contractors\CronJobUpdateDataInterface;
 
 class CronJobUpdateDataClass implements CronJobUpdateDataInterface
 {
     /**
-     * @var WalmartInterfase
+     * @var WalmartInterface
      */
     protected $walmart;
 
@@ -29,12 +29,12 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
 
     /**
      * UpdateContentClass constructor.
-     * @param WalmartInterfase $walmartInterfase
-     * @param NotificationsInterface $notificationsInterfase
+     * @param WalmartInterface $walmartInterface
+     * @param NotificationsInterface $notificationsInterface
      */
-    public function __construct(WalmartInterfase $walmartInterfase, NotificationsInterface $notificationsInterface)
+    public function __construct(WalmartInterface $walmartInterface, NotificationsInterface $notificationsInterface)
     {
-        $this->walmart = $walmartInterfase;
+        $this->walmart = $walmartInterface;
         $this->notification = $notificationsInterface;
     }
 

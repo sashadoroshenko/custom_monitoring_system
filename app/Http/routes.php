@@ -73,7 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
         return $notificationsInterfase->sendSMS($number, $message);
     });
 
-    Route::post('history/{id}', 'ItemsController@getHistories');
+    Route::post('history', 'ItemsController@getHistories');
     
     Route::resource('items', 'ItemsController');
     

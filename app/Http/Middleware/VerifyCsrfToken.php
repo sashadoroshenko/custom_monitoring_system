@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'notifications',
-        'items/updateContent'
+        'items/updateContent',
+        'history',
     ];
 }

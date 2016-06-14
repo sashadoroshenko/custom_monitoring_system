@@ -213,11 +213,11 @@
                 var id = $(this).attr('data-id');
                 var itemID = $(this).attr('data-item-id');
                 $.ajax({
-                    url: "/history/" + id,
+                    url: "/history",
                     type: "POST",
                     data: {
                         id: id,
-                        _token: "{{csrf_token()}}",
+{{--                        _token: "{{csrf_token()}}",--}}
                         type: type
                     },
                     dataType: "html",

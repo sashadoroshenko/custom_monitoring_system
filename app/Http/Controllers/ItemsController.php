@@ -191,17 +191,16 @@ class ItemsController extends Controller
     }
 
     /**
-     * @param $id
      * @param HistoryClass $historyClass
      * @return string
      */
-    public function getHistories($id, HistoryInterface $historyInterface)
+    public function getHistories(HistoryInterface $historyInterface)
     {
         if (request()->input('type') == 'stock') {
-            return $historyInterface->getStockHistories($id);
+            return $historyInterface->getStockHistories(request()->input('id'));
         }
 
-        return $historyInterface->getPriceHistories($id);
+        return $historyInterface->getPriceHistories(request()->input('id'));
     }
 
     /**

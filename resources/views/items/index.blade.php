@@ -66,7 +66,7 @@
                         </div>
 
                     </td>
-                    <td class="updated-at {{ $item->id }} text-center" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? 0 : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : showCurrentDateTime($item->prices()->where('status', 1)->first()->updated_at)) }}"></td>
+                    <td class="updated-at {{ $item->id }} text-center" data-updated-at="{{$item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : showCurrentDateTime($item->prices()->where('status', 1)->first()->updated_at)) }}"></td>
                     {{--<td>--}}
                         {{--@if($item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at)--}}
                             {{--{{ showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) }}--}}
@@ -129,18 +129,18 @@
             function updateDates() {
                 var updated = $('.updated-at');
                 updated.each(function () {
-                    if($(this).attr('data-updated-at') != 0) {
+                    if ($(this).attr('data-updated-at') != 0) {
                         var d = moment();
                         var a = moment($(this).attr('data-updated-at'));
                         var human = d.to(a);
                         $(this).text(human);
-                    }else{
+                    } else {
                         $(this).text("-");
                     }
                 });
 
                 //store latest updated date into loacal storage
-                if(typeof(Storage) !== "undefined") {
+                if (typeof(Storage) !== "undefined") {
                     localStorage.lastUpdatedTime = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
                     $('#last-updated-date-time').html(localStorage.lastUpdatedTime)
                 }
@@ -148,7 +148,7 @@
             }
 
             function desktopAlerts($item) {
-                if($item.desktopAlert == true){
+                if ($item.desktop_alerts == true) {
                     document.getElementById("myAudio").play();
                 }
             }
@@ -158,7 +158,7 @@
                 $.ajax({
                     url: "{{url('items/updateContent')}}",
                     type: "POST",
-                    data: { _token: "{{csrf_token()}}"},
+{{--                    data: {_token: "{{csrf_token()}}"},--}}
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
 //                        console.log(data);
@@ -167,50 +167,30 @@
                             var stock = data.stock;
                             var price = data.price;
 
-                        if (!$.isEmptyObject(stock)) {
-                            if (stock.length > 1) {
+                            if (!$.isEmptyObject(stock)) {
                                 stock.forEach(function (element, index, array) {
                                     if (!$.isEmptyObject(element)) {
-                                        $('#example').find(".stock." + element[0].id).html(element[0].newValue);
-                                        if (element[0].updated == true) {
-                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
-                                        }
-                                        desktopAlerts(element[0]);
+                                        $('#example').find(".stock." + element.item_id).html(element.stock);
+                                        $('#example').find(".updated-at." + element.item_id).attr('data-updated-at', element.updated_at);
+                                        desktopAlerts(element);
                                     }
                                 });
-                            } else {
-                                $('#example').find(".stock." + stock[0].id).html(stock[0].newValue);
-                                if (stock[0].updated == true) {
-                                    $('#example').find(".updated-at." + stock[0].id).attr('data-updated-at', stock[0].lastUpdated.date);
-                                }
-
-                                desktopAlerts(stock[0]);
                             }
-                        }
-                        if (!$.isEmptyObject(price)) {
-                            if (price.length > 1) {
+
+                            if (!$.isEmptyObject(price)) {
                                 price.forEach(function (element, index, array) {
                                     if (!$.isEmptyObject(element)) {
-                                        $('#example').find(".price." + element[0].id).html('$' + element[0].newValue);
-                                        if (element[0].updated == true) {
-                                            $('#example').find(".updated-at." + element[0].id).attr('data-updated-at', element[0].lastUpdated.date);
-                                        }
-                                        desktopAlerts(element[0]);
+                                        $('#example').find(".price." + element.item_id).html('$' + element.price);
+                                        $('#example').find(".updated-at." + element.item_id).attr('data-updated-at', element.updated_at);
+                                        desktopAlerts(element);
                                     }
                                 });
-                            } else {
-                                $('#example').find(".price." + price[0].id).html('$' + price[0].newValue);
-                                if (price[0].updated == true) {
-                                    $('#example').find(".updated-at." + price[0].id).attr('data-updated-at', price[0].lastUpdated.date);
-                                }
-                                desktopAlerts(price[0]);
                             }
-                        }
 
                             updateDates();
                         }
 //                        console.log(data);
-                        refreshContent(60000);
+                        refreshContent(30000);
                         updateNotifications();
                     },
                     error: function (jqXHR, textStatus, errorThrown) {

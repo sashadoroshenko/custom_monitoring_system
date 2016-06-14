@@ -12,10 +12,10 @@ class NotificationsController extends Controller
 {
     public function search()
     {
-        $emails = Notification::where('type', 'email')->where('status', 1)->get();
-        $prices = Notification::where('type', 'price')->where('status', 1)->get();
-        $stocks = Notification::where('type', 'stock')->where('status', 1)->get();
-        $phones = Notification::where('type', 'phone')->where('status', 1)->get();
+        $emails = Notification::where('type', 'email')->where('status', 1)->orderBy('created_at', 'desc')->get();
+        $prices = Notification::where('type', 'price')->where('status', 1)->orderBy('created_at', 'desc')->get();
+        $stocks = Notification::where('type', 'stock')->where('status', 1)->orderBy('created_at', 'desc')->get();
+        $phones = Notification::where('type', 'phone')->where('status', 1)->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'emails' => $emails,

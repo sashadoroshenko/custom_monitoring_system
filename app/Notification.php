@@ -29,7 +29,7 @@ class Notification extends Model
         'user_id',
         'status',
         'type',
-        'email',
+        'contact_details',
         'title',
         'content'
     ];

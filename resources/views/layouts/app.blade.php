@@ -61,7 +61,7 @@
         $.ajax({
             url: "{{url('notifications')}}",
             type: "POST",
-            data: { _token: "{{csrf_token()}}"},
+{{--            data: { _token: "{{csrf_token()}}"},--}}
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
 //                console.log(data);
@@ -77,13 +77,13 @@
                     content(phone, 'phone' );
                     humanDate();
                 }
-                refreshContent(60000);
+//                refreshContent(30000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('error');
                 console.log(jqXHR);
 
-                refreshContent(60000);
+//                refreshContent(30000);
             }
         });
 

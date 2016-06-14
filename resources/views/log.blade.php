@@ -87,19 +87,21 @@
                     </tbody>
                 </table>
             @endif
-            <div>
-                <a href="?dl={{ base64_encode($current_file) }}">
-                    <span class="glyphicon glyphicon-download-alt">
+            @if(count($logs) > 0)
+                <div>
+                    <a href="?dl={{ base64_encode($current_file) }}">
+                        <span class="glyphicon glyphicon-download-alt">
 
-                    </span>
-                    Download file
-                </a>
-                -
-                <a id="delete-log" href="?del={{ base64_encode($current_file) }}">
-                    <span class="glyphicon glyphicon-trash"></span>
-                    Delete file
-                </a>
-            </div>
+                        </span>
+                        Download file
+                    </a>
+                    -
+                    <a id="delete-log" href="?del={{ base64_encode($current_file) }}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Delete file
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

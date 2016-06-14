@@ -2,23 +2,27 @@
 
 namespace App\Services;
 
+use App\User;
 use Services_Twilio_RestException;
 use Illuminate\Support\Facades\Mail;
-use App\Services\Contractors\NotificationsInterfase;
+use App\Services\Contractors\NotificationsInterface;
 
-class NotificationsClass implements NotificationsInterfase
+class NotificationsClass implements NotificationsInterface
 {
 
+
     /**
-     * Send SMS functionality
+     * Send SMS functionality.
      *
-     * @param $number
+     * @param User $user
      * @param $title
      * @param $message
-     * @return mixed
+     * @return \Services_Twilio_Rest_Message|string
      */
-    public function sendSMS($number, $title, $message)
+    public function sendSMS(User $user, $title, $message, $url)
     {
+        $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
+            
         $twilio = new \Aloha\Twilio\Twilio(
             config('twilio.twilio.connections.twilio.sid'),
             config('twilio.twilio.connections.twilio.token'),
@@ -26,63 +30,57 @@ class NotificationsClass implements NotificationsInterfase
         );
 
         try {
-            $message = $twilio->message($number, $message);
+            $twilio_message = $twilio->message($number, $message);
         } catch (Services_Twilio_RestException $e) {
             return $e->getMessage();
         };
 
-        auth()->user()->notifications()->create([
+        $user->notifications()->create([
             'status' => 1,
             'type' => 'phone',
-            'contact_details' => auth()->user()->phone ? auth()->user()->phone : env('TWILIO_NUMBER_TO'),
+            'contact_details' => $number,
             'title' => $title,
             'content' => $message
         ]);
 
-        return $message;
+        return $twilio_message;
     }
 
+
     /**
-     * Send Email functionality
-     *
-     * @param $itemID
-     * @param null $newValue
-     * @param null $oldValue
+     * Send Email functionality.
+     * 
+     * @param User $user
      * @param $title
+     * @param $message
      * @param $url
      * @param $type
-     * @return mixed
      */
-    public function sendEmail($itemID, $newValue = null, $oldValue = null, $title = null, $url = null, $type)
+    public function sendEmail(User $user, $title, $message, $url, $type)
     {
-        if (!isset($type) || empty($type)) {
-            return;
-        }
-
-        $content = '<strong>' . $itemID . '</strong> change ' . $type . '. Old ' . $type . ' ' . $oldValue . ' new ' . $type . ' ' . $newValue . '.';
 
         Mail::send('auth.emails.notification', [
             'title' => $title,
             'url' => $url,
-            'content' => $content,
-        ], function ($m) use ($title) {
-            $m->to(auth()->user()->email)->subject($title);
+            'content' => $message,
+        ], function ($m) use ($user, $title) {
+            $m->to($user->email)->subject($title);
         });
 
-        auth()->user()->notifications()->create([
+        $user->notifications()->create([
             'status' => 1,
             'type' => $type,
-            'contact_details' => auth()->user()->email,
+            'contact_details' => $user->email,
             'title' => $title,
-            'content' => $content
+            'content' => $message
         ]);
 
-        auth()->user()->notifications()->create([
+        $user->notifications()->create([
             'status' => 1,
             'type' => 'email',
-            'contact_details' => auth()->user()->email,
+            'contact_details' => $user->email,
             'title' => $title,
-            'content' => $content
+            'content' => $message
         ]);
     }
 }

@@ -42,6 +42,10 @@
                     </ol>
                 </td>
             </tr>
+            <tr>
+                <th> Updated </th>
+                <td> {{ $item->stocks()->where('status', 1)->first()->updated_at == $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : ($item->stocks()->where('status', 1)->first()->updated_at > $item->prices()->where('status', 1)->first()->updated_at ? showCurrentDateTime($item->stocks()->where('status', 1)->first()->updated_at) : showCurrentDateTime($item->prices()->where('status', 1)->first()->updated_at)) }} </td>
+            </tr>
             </tbody>
             <tfoot>
             <tr>

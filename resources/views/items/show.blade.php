@@ -24,7 +24,7 @@
                     <ol>
                         @foreach($item->prices()->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get() as $price)
                             <li>
-                                <span class="label @if($price->status) label-primary @else label-warning @endif">{{$price->price}} / {{ showCurrentDateTime($price->updated_at) }}</span>
+                                <span class="label @if($price->status) label-success @else label-default @endif">{{$price->price}} / {{ showCurrentDateTime($price->updated_at) }}</span>
                             </li>
                         @endforeach
                     </ol>
@@ -36,7 +36,7 @@
                     <ol>
                         @foreach($item->stocks()->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get() as $stock)
                             <li>
-                                <span class="label @if($stock->status) label-primary @else label-warning @endif">{{$stock->stock}} / {{ showCurrentDateTime($stock->updated_at) }}</span>
+                                <span class="label @if($stock->status) label-success @else label-default @endif">{{$stock->stock}} / {{ showCurrentDateTime($stock->updated_at) }}</span>
                             </li>
                         @endforeach
                     </ol>

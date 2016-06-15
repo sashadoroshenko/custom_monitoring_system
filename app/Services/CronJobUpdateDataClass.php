@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\User;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Models\Price;
-use App\User;
 use App\Services\Contractors\WalmartInterface;
 use App\Services\Contractors\NotificationsInterface;
 use App\Services\Contractors\CronJobUpdateDataInterface;
@@ -23,11 +23,6 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
     protected $notification;
 
     /**
-     * @var User
-     */
-    protected $user;
-
-    /**
      * UpdateContentClass constructor.
      * @param WalmartInterface $walmartInterface
      * @param NotificationsInterface $notificationsInterface
@@ -39,13 +34,12 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
     }
 
     /**
-     * @param User $user
      * @return array|\Illuminate\Http\JsonResponse
      */
-    public function updateContent(User $user)
+    public function updateContent()
     {
 
-        $items = Item::with('prices')->get();
+        $items = Item::all();
         if ($items->isEmpty()) {
             return [];
         }
@@ -69,10 +63,10 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                         if ($vv->itemID == $v['itemId']) {
 
                             //updating price
-                            $result['price'][] = $this->getPrice($user, $v, $vv);
+                            $result['price'][] = $this->getPrice($v, $vv);
 
                             //updating stock
-                            $result['stock'][] = $this->getStock($user, $v, $vv);
+                            $result['stock'][] = $this->getStock($v, $vv);
 
                         }
                     }
@@ -89,10 +83,10 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
 
                 $response = json_decode($response->getBody(), true);
                 //updating price
-                $result['price'] = $this->getPrice($user, $response, $item);
+                $result['price'] = $this->getPrice($response, $item);
 
                 //updating stock
-                $result['stock'] = $this->getStock($user, $response, $item);
+                $result['stock'] = $this->getStock($response, $item);
             }
         }
 
@@ -101,12 +95,11 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
 
 
     /**
-     * @param User $user
      * @param $response
      * @param $item
      * @return array
      */
-    public function getStock(User $user, $response, $item)
+    public function getStock($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
             $response['salePrice'] = 0;
@@ -138,7 +131,7 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                     'stock' => $response['stock']
                 ]);
 
-                $result[] = $this->notifications($user, $response, $item, $oldStock, 'stock', 'stock');
+                $result[] = $this->notifications($response, $item, $oldStock, 'stock', 'stock');
 
             }
         }
@@ -148,12 +141,11 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
 
 
     /**
-     * @param User $user
      * @param $response
      * @param $item
      * @return array
      */
-    public function getPrice(User $user, $response, $item)
+    public function getPrice($response, $item)
     {
         if (isset($response['marketplace']) && $response['marketplace'] || isset($response['bestMarketplacePrice']) && !$response['bestMarketplacePrice']) {
             $response['salePrice'] = 0;
@@ -185,7 +177,7 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                     'price' => $response['salePrice']
                 ]);
 
-                $result[] = $this->notifications($user, $response, $item, $oldPrice);
+                $result[] = $this->notifications($response, $item, $oldPrice);
                 
             }
         }
@@ -194,7 +186,6 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
     }
 
     /**
-     * @param User $user
      * @param $response
      * @param $item
      * @param $oldValue
@@ -202,22 +193,24 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
      * @param string $search
      * @return array
      */
-    public function notifications(User $user, $response, $item, $oldValue, $type = 'price', $search = 'salePrice')
+    public function notifications($response, $item, $oldValue, $type = 'price', $search = 'salePrice')
     {
         $alerts = Item::all();
         foreach ($alerts as $alert) {
             $url = $alert->url;
             $title = $response['name'];
             $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
-            if ($alert->alert_email) {
-                if ($alert->itemID == $item->itemID) {
-                    $this->notification->sendEmail($user, $title, $message, $url, $type);
+            foreach (User::all() as $user) {
+                if ($alert->alert_email) {
+                    if ($alert->itemID == $item->itemID) {
+                        $this->notification->sendEmail($user, $title, $message, $url, $type);
+                    }
                 }
-            }
 
-            if ($alert->alert_sms) {
-                if ($alert->itemID == $item->itemID) {
-                    $this->notification->sendSMS($user, $title, $message, $url);
+                if ($alert->alert_sms) {
+                    if ($alert->itemID == $item->itemID) {
+                        $this->notification->sendSMS($user, $title, $message, $url);
+                    }
                 }
             }
         }

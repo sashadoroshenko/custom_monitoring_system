@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\User;
 use Illuminate\Console\Command;
 use App\Services\Contractors\CronJobUpdateDataInterface;
 
@@ -46,8 +45,6 @@ class CheckingFromWalmart extends Command
      */
     public function handle()
     {
-        foreach (User::all() as $user) {
-            $this->cronJob->updateContent($user);
-        }
+        $this->cronJob->updateContent();
     }
 }

@@ -10,19 +10,19 @@ use App\Services\Contractors\NotificationsInterface;
 class NotificationsClass implements NotificationsInterface
 {
 
-
     /**
      * Send SMS functionality.
      *
      * @param User $user
      * @param $title
      * @param $message
-     * @return \Services_Twilio_Rest_Message|string
+     * @param $url
+     * @return mixed
      */
     public function sendSMS(User $user, $title, $message, $url)
     {
         $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
-            
+
         $twilio = new \Aloha\Twilio\Twilio(
             config('twilio.twilio.connections.twilio.sid'),
             config('twilio.twilio.connections.twilio.token'),
@@ -46,19 +46,18 @@ class NotificationsClass implements NotificationsInterface
         return $twilio_message;
     }
 
-
     /**
      * Send Email functionality.
-     * 
+     *
      * @param User $user
      * @param $title
      * @param $message
      * @param $url
      * @param $type
+     * @return mixed
      */
     public function sendEmail(User $user, $title, $message, $url, $type)
     {
-
         Mail::send('auth.emails.notification', [
             'title' => $title,
             'url' => $url,

@@ -28,7 +28,7 @@
         @include('layouts.partials.contentheader')
 
         @if(auth()->check())
-            @include('layouts.partials.errors')
+            @include('layouts.partials.message')
         @endif
 
         <!-- Main content -->
@@ -77,13 +77,13 @@
                     content(phone, 'phone' );
                     humanDate();
                 }
-//                refreshContent(30000);
+                refreshContent(30000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('error');
                 console.log(jqXHR);
 
-//                refreshContent(30000);
+                refreshContent(30000);
             }
         });
 
@@ -93,24 +93,26 @@
         if (!$.isEmptyObject(data)) {
             $('.notification-unread-' + type + '-menu').children().remove();
             data.forEach(function (element, index, array) {
-                if (!$.isEmptyObject(element)) {
-                    $('.notification-unread-' + type + '-count').text(data.length);
-                    $('.notification-unread-' + type + '-menu').append('' +
-                            '<li>' +
-                            '<a href="/notifications/' + type + '/' + element.id + '">' +
-                            '<div class="pull-left">' +
-                            '<img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>' +
-                            '</div>' +
-                            '<h4>' +
-                            '<span class="notification-unread-' + type + '-title">' + element.title + '</span>' +
-                            '<small>' +
-                            '<i class="fa fa-clock-o"></i>' +
-                            '<span class="notification-unread-' + type + '-created created-at" data-created-at="' + element.created_at + '">' + element.created_at + '</span>' +
-                            '</small>' +
-                            '</h4>' +
-                            '<p class="notification-unread-' + type + '-content" >' + element.content.substr(0, 50) + '...</p>' +
-                            '</a>' +
-                            '</li>');
+                if(index < 10) {
+                    if (!$.isEmptyObject(element)) {
+                        $('.notification-unread-' + type + '-count').text(data.length);
+                        $('.notification-unread-' + type + '-menu').append('' +
+                                '<li>' +
+                                '<a href="/notifications/' + type + '/' + element.id + '">' +
+                                '<div class="pull-left">' +
+                                '<img src="/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>' +
+                                '</div>' +
+                                '<h4>' +
+                                '<span class="notification-unread-' + type + '-title">' + element.title + '</span>' +
+                                '<small>' +
+                                '<i class="fa fa-clock-o"></i>' +
+                                '<span class="notification-unread-' + type + '-created created-at" data-created-at="' + element.created_at + '">' + element.created_at + '</span>' +
+                                '</small>' +
+                                '</h4>' +
+                                '<p class="notification-unread-' + type + '-content" >' + element.content.substr(0, 50) + '...</p>' +
+                                '</a>' +
+                                '</li>');
+                    }
                 }
             });
         }else{

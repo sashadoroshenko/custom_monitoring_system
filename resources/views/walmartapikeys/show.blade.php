@@ -18,9 +18,9 @@
             <tfoot>
             <tr>
                 <td colspan="2">
-                    <a href="{{ url('walmart-api-keys/' . $walmartapikey->id . '/edit') }}"
-                       class="btn btn-primary btn-xs" title="Edit Walmart-api-key"><span
-                                class="glyphicon glyphicon-pencil" aria-hidden="true"/></a>
+                    <a href="{{ url('walmart-api-keys/' . $walmartapikey->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit Walmart-api-key">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"/>
+                    </a>
                     {!! Form::open([
                         'method'=>'DELETE',
                         'url' => ['walmart-api-keys', $walmartapikey->id],

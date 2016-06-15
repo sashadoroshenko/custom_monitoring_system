@@ -23,6 +23,9 @@ Route::post('register', 'Auth\AuthController@postRegister');
 
 
 Route::group(['middleware' => ['auth']], function () {
+    
+    Route::get('dashboard', 'DashboardController@index');
+
 //    Route::group(['prefix' => 'home'], function () {
 //
 //        Route::get('/', function () {
@@ -58,15 +61,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('items/items', 'ItemsController@items');
     //Route::get('items/sendMail', 'ItemsController@sendMail');
-    
-    
+
+
     Route::post('notifications', 'NotificationsController@search');
     Route::post('notifications/{type}/read-all', 'NotificationsController@update');
     Route::get('notifications/{type}', 'NotificationsController@index');
     Route::get('notifications/{type}/{id}', 'NotificationsController@show');
-    
-    
-    Route::get('twilio', function (\App\Services\Contractors\NotificationsInterfase $notificationsInterfase){
+
+
+    Route::get('twilio', function (\App\Services\Contractors\NotificationsInterfase $notificationsInterfase) {
         $number = "+15005550006";
         $message = str_split("http://" . explode('=http://', urldecode("http://c.affil.walmart.com/t/api01?l=http%3A%2F%2Fwww.walmart.com%2Fip%2FOzark-Trail-30-Ounce-Double-Wall-Vacuum-Sealed-Tumbler%2F49772708%3Faffp1%3DgpaSHUa_7RD1lrZUr7vIj0Mt6eORRwuSa3Y5aFkVuwQ%26affilsrc%3Dapi%26veh%3Daff%26wmlspartner%3Dreadonlyapi"))[1], 159);
 
@@ -74,20 +77,20 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::post('history', 'ItemsController@getHistories');
-    
+
     Route::resource('items', 'ItemsController');
-    
+
     Route::get('profile', 'ProfileController@show');
     Route::get('profile/edit', 'ProfileController@edit');
     Route::post('profile', 'ProfileController@update');
 
     Route::resource('walmart-api-keys', 'WalmartApiKeysController');
-    
+
     Route::get('logs', 'LogViewerController@index');
-    
+
 });
 
-Route::get('test', function (){
+Route::get('test', function () {
 
     $item = \App\Item::get()->first();
     dd(DateTimeZone::listIdentifiers());
@@ -108,7 +111,6 @@ Route::get('test', function (){
     dd($plucked);
 });
 
-Route::any('{catchall}', function($page){
-//    return 1;
-    abort(404,"the page '$page' doesnt exist");
+Route::any('{catchall}', function ($page) {
+    abort(404, "the page '$page' doesnt exist");
 })->where('catchall', '(.*)');

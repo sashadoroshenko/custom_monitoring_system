@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Contractors\WalmartInterfase;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Contractors\WalmartInterface;
 
 class HomeController extends Controller
 {
     /**
-     * @var WalmartInterfase
+     * @var WalmartInterface
      */
     protected $walmart;
 
     /**
      * HomeController constructor.
-     * @param WalmartInterfase $walmartInterfase
+     * @param WalmartInterface $walmartInterface
      */
-    public function __construct(WalmartInterfase $walmartInterfase)
+    public function __construct(WalmartInterface $walmartInterface)
     {
-        $this->walmart = $walmartInterfase;
+        $this->walmart = $walmartInterface;
     }
 
     /**

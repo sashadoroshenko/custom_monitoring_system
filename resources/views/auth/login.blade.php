@@ -11,7 +11,7 @@
             <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
         </div><!-- /.login-logo -->
 
-        @include('layouts.partials.errors')
+        @include('layouts.partials.message')
 
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your session</p>

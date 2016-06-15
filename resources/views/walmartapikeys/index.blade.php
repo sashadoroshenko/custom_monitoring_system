@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Walmart-api-keys <a href="{{ url('/walmart-api-keys/create') }}" class="btn btn-primary btn-xs" title="Add New Walmart-api-key"><span class="glyphicon glyphicon-plus" aria-hidden="true"/></a></h1>
+    <h1>Walmart-api-keys
+        <a href="{{ url('/walmart-api-keys/create') }}" class="btn btn-primary btn-xs" title="Add New Walmart-api-key">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+    </h1>
     <div class="table">
         <table class="table table-bordered table-striped table-hover">
             <thead>

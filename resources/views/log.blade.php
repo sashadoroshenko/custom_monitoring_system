@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <link href="{{ asset('/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         h1 {
             font-size: 1.5em;
@@ -41,6 +42,20 @@
                 @endforeach
             </div>
         </div>
+        @if(count($logs) > 0)
+            <div class="col-sm-9">
+                <a href="?dl={{ base64_encode($current_file) }}" class="btn btn-success">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                    Download file
+                </a>
+                /
+                <a id="delete-log" href="?del={{ base64_encode($current_file) }}" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-trash"></span>
+                    Delete file
+                </a>
+                <div class="clearfix" style="padding-bottom: 10px;"></div>
+            </div>
+        @endif
         <div class="col-sm-9 col-md-10 table-container">
             @if ($logs === null)
                 <div>
@@ -87,43 +102,18 @@
                     </tbody>
                 </table>
             @endif
-            @if(count($logs) > 0)
-                <div>
-                    <a href="?dl={{ base64_encode($current_file) }}">
-                        <span class="glyphicon glyphicon-download-alt">
-
-                        </span>
-                        Download file
-                    </a>
-                    -
-                    <a id="delete-log" href="?del={{ base64_encode($current_file) }}">
-                        <span class="glyphicon glyphicon-trash"></span>
-                        Delete file
-                    </a>
-                </div>
-            @endif
         </div>
     </div>
 @endsection
 
 @section('scripts')
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{{ asset('/js/jquery.dataTables.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             $('#table-log').DataTable({
-                "pageLength": 50,
-//                "order": [1, 'desc'],
-//                "stateSave": true,
-//                "stateSaveCallback": function (settings, data) {
-//                    window.localStorage.setItem("datatable", JSON.stringify(data));
-//                },
-//                "stateLoadCallback": function (settings) {
-//                    var data = JSON.parse(window.localStorage.getItem("datatable"));
-//                    if (data) data.start = 0;
-//                    return data;
-//                }
+                "pageLength": 50
             });
             $('.table-container').on('click', '.expand', function () {
                 $('#' + $(this).data('display')).toggle();

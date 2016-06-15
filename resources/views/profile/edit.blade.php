@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
     <h1>Edit User {{ $profile->id }}</h1>
 
     {!! Form::model($profile, [
@@ -51,7 +51,7 @@
     {!! Form::close() !!}
 @endsection
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="{{ asset('/js/select2.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $('select').select2();
     </script>

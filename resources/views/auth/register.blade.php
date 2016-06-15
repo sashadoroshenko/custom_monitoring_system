@@ -12,7 +12,7 @@
             <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
         </div>
 
-        @include('layouts.partials.errors')
+        @include('layouts.partials.message')
 
         <div class="register-box-body">
             <p class="login-box-msg">Register a new membership</p>

@@ -23,8 +23,8 @@
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
               <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i
-                            class="fa fa-search"></i></button>
+                <button type='submit' name='search' id='search-btn' class="btn btn-flat">
+                    <i class="fa fa-search"></i></button>
               </span>
             </div>
         </form>
@@ -32,7 +32,8 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
-            <li class="header">Dashboard</li>
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="@if(request()->is('dashboard')) active @endif"><a href="{{url('dashboard')}}"><i class='fa fa-dashboard'></i> <span>Dashboard</span></a></li>
             <!-- Optionally, you can add icons to the links -->
             <li class="treeview @if(request()->is('profile') || request()->is('walmart-api-keys') || request()->is('logs')) active @endif">
                 <a href="#"><i class='fa fa-cogs'></i> <span>Settings</span> <i class="fa fa-angle-left pull-right"></i></a>

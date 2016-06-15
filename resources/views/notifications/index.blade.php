@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <link href="{{ asset('/css/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/css/dataTables.bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
     <h1>
         <a class="btn btn-warning read-all" href="#">Make all us read</a>
     </h1>
@@ -42,8 +42,8 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('/js/jquery.dataTables.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/js/dataTables.bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#example').DataTable();

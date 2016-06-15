@@ -99,7 +99,7 @@
         </div>
     </nav>
     @if(auth()->check())
-        @include('layouts.partials.errors')
+        @include('layouts.partials.message')
     @endif
 
     <div class="container-fluid">

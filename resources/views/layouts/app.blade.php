@@ -60,7 +60,7 @@
 {{--            data: { _token: "{{csrf_token()}}"},--}}
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
-//                console.log(data);
+                //console.log(data);return;
                 if (!$.isEmptyObject(data)) {
                     var email = data.emails;
                     var price = data.prices;
@@ -89,12 +89,14 @@
         if (!$.isEmptyObject(data)) {
             $('.notification-unread-' + type + '-menu').children().remove();
 
-            var length = data.length;
-            data.splice(10, data.length - 10);
+            var items = data.data;
+            var count = data.data_count;
+//            var length = data.length;
+//            data.splice(10, data.length - 10);
 
-            data.forEach(function (element, index, array) {
+            items.forEach(function (element, index, array) {
                 if (!$.isEmptyObject(element)) {
-                    $('.notification-unread-' + type + '-count').text(length);
+                    $('.notification-unread-' + type + '-count').text(count);
                     $('.notification-unread-' + type + '-menu').append('' +
                             '<li>' +
                             '<a href="/notifications/' + type + '/' + element.id + '">' +

@@ -17,10 +17,22 @@ class NotificationsController extends Controller
         $phones = Notification::where('type', 'phone')->where('status', 1)->orderBy('created_at', 'desc')->get();
 
         return response()->json([
-            'emails' => $emails,
-            'prices' => $prices,
-            'stocks' => $stocks,
-            'phones' => $phones
+            'emails' => [
+                'data' => $emails->take(10),
+                'data_count' => $emails->count()
+            ],
+            'prices' => [
+                'data' => $prices->take(10),
+                'data_count' => $prices->count()
+            ],
+            'stocks' => [
+                'data' => $stocks->take(10),
+                'data_count' => $stocks->count()
+            ],
+            'phones' => [
+                'data' => $phones->take(10),
+                'data_count' => $phones->count()
+            ]
         ]);
     }
 
@@ -42,11 +54,11 @@ class NotificationsController extends Controller
     public function update($type)
     {
         $notifications = Notification::where('type', str_singular($type))->get();
-        foreach ($notifications as $notification){
+        foreach ($notifications as $notification) {
             $notification->status = 0;
             $notification->save();
         }
-        
+
         return response()->json(['status' => 200, 'message' => 'Success', 'type' => str_singular($type)]);
     }
 }

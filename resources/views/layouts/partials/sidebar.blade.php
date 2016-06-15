@@ -16,7 +16,7 @@
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
-    @endif
+        @endif
 
     <!-- search form (Optional) -->
         <form action="#" method="get" class="sidebar-form">
@@ -31,21 +31,23 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
-            <li class="@if(request()->is('dashboard')) active @endif"><a href="{{url('dashboard')}}"><i class='fa fa-dashboard'></i> <span>Dashboard</span></a></li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="treeview @if(request()->is('profile') || request()->is('walmart-api-keys') || request()->is('logs')) active @endif">
-                <a href="#"><i class='fa fa-cogs'></i> <span>Settings</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li class="@if(request()->is('profile')) active @endif"><a href="{{url('profile')}}"><i class='fa fa-link'></i> <span>Profile</span></a></li>
-                    <li class="@if(request()->is('walmart-api-keys')) active @endif"><a href="{{url('walmart-api-keys')}}"><i class='fa fa-link'></i><span>Walmart api keys</span></a></li>
-                    <li class="@if(request()->is('logs')) active @endif"><a href="{{url('logs')}}"><i class='fa fa-link'></i> <span>Logs</span></a></li>
-                </ul>
-            </li>
-            <li class="@if(request()->is('items')) active @endif"><a href="{{url('items')}}"><i class='fa fa-link'></i> <span>Items</span></a></li>
+        @if (! Auth::guest())
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="@if(request()->is('dashboard')) active @endif"><a href="{{url('dashboard')}}"><i class='fa fa-dashboard'></i> <span>Dashboard</span></a></li>
+                <!-- Optionally, you can add icons to the links -->
+                <li class="treeview @if(request()->is('profile') || request()->is('walmart-api-keys') || request()->is('logs')) active @endif">
+                    <a href="#"><i class='fa fa-cogs'></i> <span>Settings</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                        <li class="@if(request()->is('profile')) active @endif"><a href="{{url('profile')}}"><i class='fa fa-link'></i> <span>Profile</span></a></li>
+                        <li class="@if(request()->is('walmart-api-keys')) active @endif"><a href="{{url('walmart-api-keys')}}"><i class='fa fa-link'></i><span>Walmart api keys</span></a></li>
+                        <li class="@if(request()->is('logs')) active @endif"><a href="{{url('logs')}}"><i class='fa fa-link'></i> <span>Logs</span></a></li>
+                    </ul>
+                </li>
+                <li class="@if(request()->is('items')) active @endif"><a href="{{url('items')}}"><i class='fa fa-link'></i> <span>Items</span></a></li>
 
-        </ul><!-- /.sidebar-menu -->
+            </ul><!-- /.sidebar-menu -->
+        @endif
     </section>
     <!-- /.sidebar -->
 </aside>

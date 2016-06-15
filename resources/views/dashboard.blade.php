@@ -17,15 +17,15 @@
         </div><!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-green">
+            <div class="small-box bg-red">
                 <div class="inner">
-                    <h3>{{ $logs_count }}</h3>
-                    <p>Total Logs</p>
+                    <h3>{{$keys_count}}</h3>
+                    <p>Total Keys</p>
                 </div>
                 <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
+                    <i class="fa fa-unlock-alt"></i>
                 </div>
-                <a href="{{url('logs')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{url('walmart-api-keys')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div><!-- ./col -->
         <div class="col-lg-3 col-xs-6">
@@ -43,22 +43,22 @@
         </div><!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-red">
+            <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>{{$keys_count}}</h3>
-                    <p>Total Keys</p>
+                    <h3>{{ $logs_count }}</h3>
+                    <p>Total Logs</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-unlock-alt"></i>
+                    <i class="ion ion-stats-bars"></i>
                 </div>
-                <a href="{{url('walmart-api-keys')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{url('logs')}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div><!-- ./col -->
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <div class="box box-info">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Latest Orders</h3>
                     <div class="box-tools pull-right">

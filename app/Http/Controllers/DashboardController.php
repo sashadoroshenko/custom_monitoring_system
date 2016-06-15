@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
-use App\Models\Price;
-use App\Models\Stock;
-use App\Models\WalmartApiKey;
 use App\User;
+use App\Models\Item;
+use App\Models\WalmartApiKey;
 use Rap2hpoutre\LaravelLogViewer\LaravelLogViewer;
 
 class DashboardController extends Controller
@@ -44,8 +42,6 @@ class DashboardController extends Controller
             })
             ->take(5)
             ->all();
-
-//        dd($last_list);
 
         return view('dashboard', compact('users_count', 'logs_count', 'items', 'keys_count', 'product_list', 'last_list'));
     }

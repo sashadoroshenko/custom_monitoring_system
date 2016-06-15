@@ -1,15 +1,10 @@
 @extends('layouts.auth')
 
-@section('htmlheader_title')
-    Register
-@endsection
-
 @section('content')
 
-    <body class="hold-transition register-page">
     <div class="register-box">
         <div class="register-logo">
-            <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
+            <a href="{{ url('/') }}"><b>Admin</b>LTE</a>
         </div>
 
         @include('layouts.partials.message')
@@ -38,7 +33,7 @@
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
                             <label>
-                                <input type="checkbox"> I agree to the <a href="#">terms</a>
+                                <input type="checkbox"> I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">terms</a>
                             </label>
                         </div>
                     </div><!-- /.col -->
@@ -48,12 +43,13 @@
                 </div>
             </form>
 
-{{--            @include('auth.partials.social_login')--}}
-
             <a href="{{ url('/login') }}" class="text-center">I already have a membership</a>
         </div><!-- /.form-box -->
     </div><!-- /.register-box -->
+@include('auth.terms')
+@endsection
 
+@section('scripts')
     @include('layouts.partials.scripts_auth')
 
     <script>
@@ -65,6 +61,4 @@
             });
         });
     </script>
-    </body>
-
 @endsection

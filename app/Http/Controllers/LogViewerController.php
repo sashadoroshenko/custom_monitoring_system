@@ -30,6 +30,6 @@ class LogViewerController extends Controller
 
         $current_file = LaravelLogViewer::getFileName();
 
-        return view('log', compact('logs','files', 'current_file'));
+        return view('logs.log', compact('logs','files', 'current_file'));
     }
 }

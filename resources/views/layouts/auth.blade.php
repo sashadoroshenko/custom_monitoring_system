@@ -3,6 +3,9 @@
 
 @include('layouts.partials.htmlheader')
 
-@yield('content')
+<body class="hold-transition login-page">
+    @yield('content')
+    @yield('scripts')
+</body>
 
 </html>

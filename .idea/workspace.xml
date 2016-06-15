@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0ccf5fb-d2c5-41fd-88b0-df3956cbbd6e" name="Default" comment="added docblockes for">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/CheckingFromWalmart.php" afterPath="$PROJECT_DIR$/app/Console/Commands/CheckingFromWalmart.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Services/Contractors/CronJobUpdateDataInterface.php" afterPath="$PROJECT_DIR$/app/Services/Contractors/CronJobUpdateDataInterface.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php" afterPath="$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Services/NotificationsClass.php" afterPath="$PROJECT_DIR$/app/Services/NotificationsClass.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/items/show.blade.php" afterPath="$PROJECT_DIR$/resources/views/items/show.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Services/WalmartClass.php" afterPath="$PROJECT_DIR$/app/Services/WalmartClass.php" />
     </list>
     <ignored path="custom_monitoring_system.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,35 +32,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="UpdateContentInterface.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Services/Contractors/UpdateContentInterface.php">
+      <file leaf-file-name="WalmartClass.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Services/WalmartClass.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CronJobUpdateDataClass.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="202" column="44" selection-start-line="202" selection-start-column="44" selection-end-line="202" selection-end-column="44" />
+            <state relative-caret-position="203">
+              <caret line="363" column="30" selection-start-line="363" selection-start-column="15" selection-end-line="363" selection-end-column="30" />
               <folding>
-                <element signature="e#32#45#0#PHP" expanded="true" />
+                <element signature="e#31#53#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HistoryClass.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Services/HistoryClass.php">
+      <file leaf-file-name="CronJobUpdateDataClass.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="351">
+              <caret line="212" column="52" selection-start-line="212" selection-start-column="45" selection-end-line="212" selection-end-column="52" />
               <folding>
-                <element signature="e#32#52#0#PHP" expanded="true" />
+                <element signature="e#32#45#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,34 +59,10 @@
       <file leaf-file-name="NotificationsClass.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Services/NotificationsClass.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1411">
-              <caret line="83" column="5" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
+            <state relative-caret-position="544">
+              <caret line="32" column="46" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="46" />
               <folding>
                 <element signature="e#32#45#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UpdateContentClass.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Services/UpdateContentClass.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="73" column="20" selection-start-line="73" selection-start-column="20" selection-end-line="73" selection-end-column="20" />
-              <folding>
-                <element signature="e#32#52#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WalmartClass.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Services/WalmartClass.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-716">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#31#53#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -122,7 +85,6 @@
         <option value="$PROJECT_DIR$/app/Services/HistoryClass.php" />
         <option value="$PROJECT_DIR$/app/User.php" />
         <option value="$PROJECT_DIR$/app/Services/Contractors/WalmartInterfase.php" />
-        <option value="$PROJECT_DIR$/app/Services/WalmartClass.php" />
         <option value="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" />
@@ -161,9 +123,10 @@
         <option value="$PROJECT_DIR$/resources/views/items/show.blade.php" />
         <option value="$PROJECT_DIR$/app/Services/Contractors/CronJobUpdateDataInterface.php" />
         <option value="$PROJECT_DIR$/app/Services/Contractors/NotificationsInterface.php" />
-        <option value="$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php" />
         <option value="$PROJECT_DIR$/app/Services/NotificationsClass.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/CheckingFromWalmart.php" />
+        <option value="$PROJECT_DIR$/app/Services/WalmartClass.php" />
+        <option value="$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php" />
       </list>
     </option>
   </component>
@@ -543,7 +506,7 @@
       <workItem from="1465539030208" duration="27481000" />
       <workItem from="1465798086035" duration="24545000" />
       <workItem from="1465884797800" duration="27881000" />
-      <workItem from="1465970855240" duration="17392000" />
+      <workItem from="1465970855240" duration="19658000" />
     </task>
     <task id="LOCAL-00001" summary="worked on getting data from walmart">
       <created>1464012105470</created>
@@ -570,7 +533,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="412240000" />
+    <option name="totallyTimeSpent" value="414506000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -1055,48 +1018,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/Contractors/WalmartInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1613">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/Contractors/UpdateContentInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/WalmartClass.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-716">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#31#53#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Services/UpdateContentClass.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1241">
           <caret line="73" column="20" selection-start-line="73" selection-start-column="20" selection-end-line="73" selection-end-column="20" />
           <folding>
             <element signature="e#32#52#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/NotificationsClass.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1411">
-          <caret line="83" column="5" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
-          <folding>
-            <element signature="e#32#45#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1111,12 +1038,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php">
+    <entry file="file://$PROJECT_DIR$/app/Services/Contractors/UpdateContentInterface.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="202" column="44" selection-start-line="202" selection-start-column="44" selection-end-line="202" selection-end-column="44" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Services/Contractors/WalmartInterface.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Services/NotificationsClass.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="46" selection-start-line="32" selection-start-column="39" selection-end-line="32" selection-end-column="46" />
           <folding>
             <element signature="e#32#45#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Services/CronJobUpdateDataClass.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="212" column="52" selection-start-line="212" selection-start-column="45" selection-end-line="212" selection-end-column="52" />
+          <folding>
+            <element signature="e#32#45#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Services/WalmartClass.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="363" column="30" selection-start-line="363" selection-start-column="15" selection-end-line="363" selection-end-column="30" />
+          <folding>
+            <element signature="e#31#53#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>

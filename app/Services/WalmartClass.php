@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use App\Models\WalmartApiKey;
 use function GuzzleHttp\Psr7\str;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use App\Services\Contractors\WalmartInterface;
 
 class WalmartClass implements WalmartInterface
@@ -359,13 +360,17 @@ class WalmartClass implements WalmartInterface
     {
         try {
             $result = $this->client->request($method, $url, $params);
-        } catch (ClientException $e) {
+        }
+        catch (ClientException $e) {
             $id = WalmartApiKey::whereKey(self::$key)->first()->id;
             if (!self::$count--) {
                 return $e->getResponse();
             }
             self::$key = WalmartApiKey::where('id', '>', $id)->first()->key;
             $params['query']['apiKey'] = self::$key;
+            return $this->error_hendler($url, $params, $method);
+        }
+        catch (ConnectException $e) {
             return $this->error_hendler($url, $params, $method);
         }
         return $result;

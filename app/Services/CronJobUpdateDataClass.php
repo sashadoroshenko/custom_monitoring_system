@@ -199,16 +199,17 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
         foreach ($alerts as $alert) {
             $url = $alert->url;
             $title = $response['name'];
-            $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
             foreach (User::all() as $user) {
                 if ($alert->alert_email) {
                     if ($alert->itemID == $item->itemID) {
+                        $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
                         $this->notification->sendEmail($user, $title, $message, $url, $type);
                     }
                 }
 
                 if ($alert->alert_sms) {
                     if ($alert->itemID == $item->itemID) {
+                        $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
                         $this->notification->sendSMS($user, $title, $message, $url);
                     }
                 }

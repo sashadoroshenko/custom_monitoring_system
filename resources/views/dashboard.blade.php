@@ -6,7 +6,7 @@
             <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
-                    <h3>{{$items->count()}}</h3>
+                    <h3>{{$items}}</h3>
                     <p>Total Items</p>
                 </div>
                 <div class="icon">
@@ -56,10 +56,8 @@
         </div><!-- ./col -->
     </div>
 
-
     <div class="row">
-
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">Latest Orders</h3>
@@ -82,10 +80,10 @@
                             <tbody>
                                 @foreach($last_list as $last)
                                     <tr>
-                                        <td><a href="{{$last->item->url}}" target="_blank">{{$last->item->itemID}}</a></td>
-                                        <td>{{$last->item->title}}</td>
-                                        <td><span class="label label-success">${{$last->price}}</span></td>
-                                        <td><span class="label label-success">{{$last->item->stocks[0]->stock}}</span></td>
+                                        <td><a href="{{$last->url}}" target="_blank">{{$last->itemID}}</a></td>
+                                        <td>{{$last->title}}</td>
+                                        <td><span class="label label-success">${{$last->prices[0]->price}}</span></td>
+                                        <td><span class="label @if($last->stocks[0]->stock == "Not available") label-warning @else label-success @endif">{{$last->stocks[0]->stock}}</span></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -95,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Recently Added Products</h3>

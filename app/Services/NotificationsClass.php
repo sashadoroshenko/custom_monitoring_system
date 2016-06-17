@@ -23,6 +23,7 @@ class NotificationsClass implements NotificationsInterface
      */
     public function sendSMS(User $user, $title, $message, $url, $send = true)
     {
+        $twilio_message = [];
         $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
 
         if($send) {

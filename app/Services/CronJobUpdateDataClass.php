@@ -178,7 +178,7 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                 ]);
 
                 $result[] = $this->notifications($response, $item, $oldPrice);
-                
+
             }
         }
 
@@ -195,6 +195,10 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
      */
     public function notifications($response, $item, $oldValue, $type = 'price', $search = 'salePrice')
     {
+        $send = true;
+        if($response['stock'] == "Not available"){
+            $send = false;
+        }
         $alerts = Item::all();
         foreach ($alerts as $alert) {
             $url = $alert->url;
@@ -203,14 +207,14 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                 if ($alert->alert_email) {
                     if ($alert->itemID == $item->itemID) {
                         $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
-                        $this->notification->sendEmail($user, $title, $message, $url, $type);
+                        $this->notification->sendEmail($user, $title, $message, $url, $type, $send);
                     }
                 }
 
                 if ($alert->alert_sms) {
                     if ($alert->itemID == $item->itemID) {
-                        $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
-                        $this->notification->sendSMS($user, $title, $message, $url);
+                        $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
+                        $this->notification->sendSMS($user, $title, $message, $url, $send);
                     }
                 }
             }

@@ -203,22 +203,39 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
         foreach ($alerts as $alert) {
             $url = $alert->url;
             $title = $response['name'];
-            foreach (User::all() as $user) {
                 if ($alert->alert_email) {
                     if ($alert->itemID == $item->itemID) {
                         $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
-                        $this->notification->sendEmail($user, $title, $message, $url, $type, $send);
+                        $this->notification->sendEmail($title, $message, $url, $type, $send);
+
+                        foreach(User::all() as $user) {
+                            $user->notifications()->create([
+                                'status' => 1,
+                                'type' => $type,
+                                'contact_details' => $user->email,
+                                'title' => $title,
+                                'content' => $message
+                            ]);
+
+                            $user->notifications()->create([
+                                'status' => 1,
+                                'type' => 'email',
+                                'contact_details' => $user->email,
+                                'title' => $title,
+                                'content' => $message
+                            ]);
+                        }
                     }
                 }
 
                 if ($alert->alert_sms) {
                     if ($alert->itemID == $item->itemID) {
                         $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
-                        $this->notification->sendSMS($user, $title, $message, $url, $send);
+                        $this->notification->sendSMS( $title, $message, $url, $send);
+
                     }
                 }
-            }
+
         }
     }
-
 }

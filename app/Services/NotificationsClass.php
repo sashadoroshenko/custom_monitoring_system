@@ -6,7 +6,7 @@ use App\User;
 use Services_Twilio_RestException;
 use Illuminate\Support\Facades\Mail;
 use App\Services\Contractors\NotificationsInterface;
-use Swift_TransportException;
+
 
 class NotificationsClass implements NotificationsInterface
 {
@@ -14,47 +14,51 @@ class NotificationsClass implements NotificationsInterface
     /**
      * Send SMS functionality.
      *
-     * @param User $user
      * @param $title
      * @param $message
      * @param $url
      * @param $send
      * @return mixed
      */
-    public function sendSMS(User $user, $title, $message, $url, $send = true)
+    public function sendSMS($title, $message, $url, $send = true)
     {
-        $twilio_message = [];
-        $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
+        $users = User::all();
+        foreach ($users as $user) {
 
-        if($send) {
-            $twilio = new \Aloha\Twilio\Twilio(
-                config('twilio.twilio.connections.twilio.sid'),
-                config('twilio.twilio.connections.twilio.token'),
-                config('twilio.twilio.connections.twilio.from')
-            );
+            $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
 
-            try {
-                $twilio_message = $twilio->message($number, $message);
-            } catch (Services_Twilio_RestException $e) {
-                return $this->sendSMS($user, $title, $message, $url, $send);
-            };
+            if ($send) {
+                $twilio = new \Aloha\Twilio\Twilio(
+                    config('twilio.twilio.connections.twilio.sid'),
+                    config('twilio.twilio.connections.twilio.token'),
+                    config('twilio.twilio.connections.twilio.from')
+                );
+
+                $this->send($twilio, $user, $number, $message);
+            }
+
+            $user->notifications()->create([
+                'status' => 1,
+                'type' => 'phone',
+                'contact_details' => $number,
+                'title' => $title,
+                'content' => $message
+            ]);
         }
+    }
 
-        $user->notifications()->create([
-            'status' => 1,
-            'type' => 'phone',
-            'contact_details' => $number,
-            'title' => $title,
-            'content' => $message
-        ]);
-
-        return $twilio_message;
+    private function send($twilio, $user, $number, $message)
+    {
+        try {
+            $twilio->message($number, $message);
+        } catch (Services_Twilio_RestException $e) {
+            return $this->send($twilio, $user, $number, $message);
+        };
     }
 
     /**
      * Send Email functionality.
      *
-     * @param User $user
      * @param $title
      * @param $message
      * @param $url
@@ -62,36 +66,17 @@ class NotificationsClass implements NotificationsInterface
      * @param $send
      * @return mixed
      */
-    public function sendEmail(User $user, $title, $message, $url, $type, $send = true)
+    public function sendEmail($title, $message, $url, $type, $send = true)
     {
-        if($send) {
-            try {
-                Mail::send('auth.emails.notification', [
-                    'title' => $title,
-                    'url' => $url,
-                    'content' => $message,
-                ], function ($m) use ($user, $title) {
-                    $m->to($user->email)->subject($title);
-                });
-            } catch (Swift_TransportException $e) {
-                $this->sendEmail($user, $title, $message, $url, $type);
-            };
+        if ($send) {
+            $emails = User::lists('email')->toArray();
+            Mail::send('auth.emails.notification', [
+                'title' => $title,
+                'url' => $url,
+                'content' => $message,
+            ], function ($m) use ($emails, $title) {
+                $m->to($emails)->subject($title);
+            });
         }
-
-        $user->notifications()->create([
-            'status' => 1,
-            'type' => $type,
-            'contact_details' => $user->email,
-            'title' => $title,
-            'content' => $message
-        ]);
-
-        $user->notifications()->create([
-            'status' => 1,
-            'type' => 'email',
-            'contact_details' => $user->email,
-            'title' => $title,
-            'content' => $message
-        ]);
     }
 }

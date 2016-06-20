@@ -33,7 +33,7 @@
                             <span class="label label-danger"> Read </span>
                         @endif
                     </td>
-                    <td>{{ showCurrentDateTime($notification->updated_at) }}</td>
+                    <td>{{ showCurrentDateTime($notification->created_at) }}</td>
                 </tr>
             @endforeach
             </tbody>

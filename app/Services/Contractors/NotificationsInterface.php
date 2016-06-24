@@ -13,10 +13,9 @@ interface NotificationsInterface
      * @param $title
      * @param $message
      * @param $url
-     * @param $send
      * @return mixed
      */
-    public function sendSMS( $title, $message, $url, $send = true);
+    public function sendSMS( $title, $message, $url);
 
     /**
      * Send Email functionality.
@@ -25,9 +24,8 @@ interface NotificationsInterface
      * @param $message
      * @param $url
      * @param $type
-     * @param $send
      * @return mixed
      */
-    public function sendEmail( $title, $message, $url, $type, $send = true);
+    public function sendEmail( $title, $message, $url, $type);
 
 }

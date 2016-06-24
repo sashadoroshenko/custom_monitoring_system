@@ -196,27 +196,22 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
     public function notifications($response, $item, $oldValue, $type = 'price', $search = 'salePrice')
     {
         $send = true;
-        if($response['stock'] == "Not available"){
+        if ($response['stock'] == "Not available" && $type == 'price') {
+            $send = false;
+        }
+        if ($response['stock'] == "Not available" && $oldValue == $response['stock'] && $type == 'stock') {
             $send = false;
         }
         $alerts = Item::all();
         foreach ($alerts as $alert) {
             $url = $alert->url;
             $title = $response['name'];
-                if ($alert->alert_email) {
-                    if ($alert->itemID == $item->itemID) {
-                        $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
-                        $this->notification->sendEmail($title, $message, $url, $type, $send);
-
-                        foreach(User::all() as $user) {
-                            $user->notifications()->create([
-                                'status' => 1,
-                                'type' => $type,
-                                'contact_details' => $user->email,
-                                'title' => $title,
-                                'content' => $message
-                            ]);
-
+            if ($alert->alert_email) {
+                if ($alert->itemID == $item->itemID) {
+                    $message = "Item with ID <strong>{$item->itemID}</strong> change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}.";
+                    if ($send) {
+                        $users = User::all();
+                        foreach ($users as $user) {
                             $user->notifications()->create([
                                 'status' => 1,
                                 'type' => 'email',
@@ -225,16 +220,43 @@ class CronJobUpdateDataClass implements CronJobUpdateDataInterface
                                 'content' => $message
                             ]);
                         }
+                        $this->notification->sendEmail($title, $message, $url, $type);
+                    }
+
+                    foreach (User::all() as $user) {
+                        $user->notifications()->create([
+                            'status' => 1,
+                            'type' => $type,
+                            'contact_details' => $user->email,
+                            'title' => $title,
+                            'content' => $message
+                        ]);
+
+
                     }
                 }
+            }
 
-                if ($alert->alert_sms) {
-                    if ($alert->itemID == $item->itemID) {
-                        $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
-                        $this->notification->sendSMS( $title, $message, $url, $send);
-
+            if ($alert->alert_sms) {
+                if ($alert->itemID == $item->itemID) {
+                    $message = "Item with ID {$item->itemID} change {$type} Old {$type} {$oldValue} new {$type} {$response[$search]}. {$url}";
+                    if ($send) {
+                        $users = User::all();
+                        foreach ($users as $user) {
+                            $number = $user->phone ? $user->phone : env('TWILIO_NUMBER_TO');
+                            $user->notifications()->create([
+                                'status' => 1,
+                                'type' => 'phone',
+                                'contact_details' => $number,
+                                'title' => $title,
+                                'content' => $message
+                            ]);
+                        }
+                        $this->notification->sendSMS($title, $message, $url);
                     }
+
                 }
+            }
 
         }
     }
